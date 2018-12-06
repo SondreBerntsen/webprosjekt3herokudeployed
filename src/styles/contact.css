@@ -1,0 +1,115 @@
+.contact-title {
+  margin-top: 50px;
+  padding: 0px 20px 5px 30px;
+}
+
+.contact-title h2 {
+  font-size: 1.7rem;
+}
+.contact-person {
+  margin-top: 10px;
+  margin-bottom: 93px;
+}
+.card.contact-person-card {
+  width: 18rem;
+}
+
+.contact-adress {
+  width: 50%;
+  margin: 0 auto;
+}
+.contact-adress p {
+  font-size: 1rem;
+  display: inline-block;
+}
+.contact-adress i {
+  font-size: 1.5rem;
+  float: left;
+  padding-right: 10px;
+  color: #822a40;
+}
+.contact-form {
+  top: 50px;
+}
+.card.contact-form-card {
+  width: 24rem;
+}
+p.contact-form-header-text {
+  font-size: 0.6rem;
+}
+
+textarea.form-control {
+  height: 140px;
+}
+
+.list-group-item p {
+  font-size: 0.9rem;
+  display: inline-block;
+}
+
+img.contact-card-img {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(20%);
+  -webkit-transition: filter 1s;
+  -webkit-transition: -webkit-filter 1s;
+  transition: -webkit-filter 1s;
+  transition: filter 1s;
+  transition: filter 1s, -webkit-filter 1s;
+  height: 300px;
+  object-fit: cover;
+}
+
+@import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css");
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+
+  .contact-header-text {
+    padding: 0px 15px 0px 15px;
+  }
+  .contact-form {
+    padding: 0;
+    margin-bottom: 50px;
+  }
+  .contact-form-content {
+    padding: 0;
+  }
+  .contact-form-short-text {
+    margin: 0;
+  }
+  .card.contact-form-card {
+    width: 100%;
+  }
+  .contact-person {
+    padding: 0;
+    margin-bottom: 30px;
+  }
+  .card.contact-person-card {
+    width: 100%;
+  }
+  .contact-adress {
+    margin: 0;
+    width: 100%;
+  }
+  .contact-adress i {
+    font-size: 1.4rem;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 5px;
+  }
+  .contact-adress p {
+    font-size: 0.9rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 35px;
+  }
+}
+
+.input-group-addon {
+  margin: 5px 18px 0px 0px;
+  background-color: #ffffff;
+}
+
+.contactFormText {
+  margin: 14px 45px 6px 45px;
+}
