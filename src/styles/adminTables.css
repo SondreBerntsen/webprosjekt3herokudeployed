@@ -13,7 +13,10 @@
   margin-right: 20px;
   margin-bottom: 20px;
 }
-
+.scrollableDiv {
+  overflow-y: auto;
+  height: 325px;
+}
 .collapseForm {
   background-color: #d5e0e2;
   margin-bottom: 20px;
@@ -28,13 +31,13 @@
   padding-top: 20px;
   margin-bottom: 20px;
 }
-.subElement{
+.subElement {
   background-color: lightgrey;
   box-sizing: border-box;
   padding: 10px;
   margin-top: 5px;
 }
-.subElementLeft{
+.subElementLeft {
   margin-right: 5px;
 }
 .btnInElementAdmin {
@@ -118,4 +121,13 @@
   font-weight: bold;
   color: rgb(88, 88, 88);
   font-size: 18px;
+}
+
+.btn-selected {
+  background-color: #00b5bbbd;
+  color: black;
+}
+
+.btn-selected:focus {
+  box-shadow: none;
 }

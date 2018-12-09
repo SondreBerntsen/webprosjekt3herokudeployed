@@ -30,7 +30,7 @@ class AdminGeneral extends Component {
   getLivestreamID = _ => {
     fetch(`http://localhost:5000/livestream`)
       .then(response => response.json())
-      .then(response => this.setState({ livestream: response.data }))
+      .then(response => this.setState({ livestream: response.data[0] }))
       .catch(err => console.log(err));
   };
 
@@ -49,7 +49,7 @@ class AdminGeneral extends Component {
   getAboutData = _ => {
     fetch(`http://localhost:5000/general`)
       .then(response => response.json())
-      .then(response => this.setState({ about: response.data }))
+      .then(response => this.setState({ about: response.data[0] }))
       .catch(err => console.log(err));
   };
   getContactList = _ => {
@@ -59,84 +59,128 @@ class AdminGeneral extends Component {
       .catch(err => console.log(err));
   };
 
-  addFestivalReport = e => {
+  // function for when submit button has been clicked
+  handleSubmit = (e, id) => {
     e.preventDefault();
-    // saves the new data in object 'body'
-    let body = {
-      title: this.refs.createReportTitle.value,
-      link: this.refs.createReportLink.value,
-      language: this.state.reportLanguage
-    };
-    /* sends 'body'-object to festivalreports/add to 
-       add new festivalreport to the database     */
-    fetch(`http://localhost:5000/festivalreports/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
-  addPartner = e => {
-    e.preventDefault();
-    // saves the new data in object 'body'
-    let body = {
-      partner_name: this.refs.createPartnerName.value,
-      type: this.state.partnerType
-    };
-    /* sends 'body'-object to festivalreports/add to 
-       add new festivalreport to the database     */
-    fetch(`http://localhost:5000/partners/add`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
-  updatePartnerPrivateText = e => {
-    e.preventDefault();
-    // saves the new changes in object 'body'
-    let body = {
-      partner_txt_private: this.state.partnerPrivateText
-    };
-    // sends 'body'-object to general/frontpageUpdate to update the database
-    fetch(`http://localhost:5000/partners/updatePrivatePartnerText`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
-  updatePartnerOfficialText = e => {
-    e.preventDefault();
-    // saves the new changes in object 'body'
-    let body = {
-      partner_txt_official: this.state.partnerOfficialText
-    };
-    // sends 'body'-object to general/frontpageUpdate to update the database
-    fetch(`http://localhost:5000/partners/updateOfficialPartnerText`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
-  // function for when fields have been changed
-  handleChange = e => {
-    // checks name of target
+    let body = {};
     switch (e.target.name) {
-      //if name equals 'language'..
-      case "language":
-        // .. it sets the value of target in state
-        this.setState({ reportLanguage: e.target.value });
+      case "updatePartnerOfficialText":
+        body = {
+          partner_txt_official: this.refs.editPartnerOfficialText.value
+        };
+        // sends 'body'-object to general/frontpageUpdate to update the database
+        fetch(`http://localhost:5000/partners/updateOfficialPartnerText`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getAboutData();
+          })
+          .catch(err => console.log(err));
         break;
-      case "partnerType":
-        this.setState({ partnerType: e.target.value });
+      case "updatePartnerPrivateText":
+        body = {
+          partner_txt_private: this.refs.editPartnerPrivateText.value
+        };
+        // sends 'body'-object to general/frontpageUpdate to update the database
+        fetch(`http://localhost:5000/partners/updatePrivatePartnerText`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getAboutData();
+          })
+          .catch(err => console.log(err));
         break;
-      case "partnerOfficialText":
-        this.setState({ partnerOfficialText: e.target.value });
+      case "addReport":
+        body = {
+          title: this.refs.createReportTitle.value,
+          link: this.refs.createReportLink.value,
+          language: this.state.createReportLanguage
+        };
+        /* sends 'body'-object to festivalreports/add to 
+           add new festivalreport to the database     */
+        fetch(`http://localhost:5000/festivalreports/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getReports();
+          })
+          .catch(err => console.log(err));
         break;
-      case "partnerPrivateText":
-        this.setState({ partnerPrivateText: e.target.value });
+      case "addPartner":
+        body = {
+          partner_name: this.refs.createPartnerName.value,
+          type: this.state.createPartnerType
+        };
+        /* sends 'body'-object to festivalreports/add to 
+           add new festivalreport to the database     */
+        fetch(`http://localhost:5000/partners/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getPartners();
+          })
+          .catch(err => console.log(err));
+        break;
+      default:
+    }
+  };
+
+  // function for when fields have been edited
+  handleChange = e => {
+    switch (e.target.name) {
+      // cases for partner
+      case "createReportLanguage":
+        this.setState({ createReportLanguage: e.target.value });
+        break;
+      case "createPartnerType":
+        this.setState({ createPartnerType: e.target.value });
+        break;
+
+      default:
+    }
+  };
+
+  handleDelete = (e, id) => {
+    e.preventDefault();
+    let body = {};
+    switch (e.target.name) {
+      case "deleteReport":
+        body = {
+          id: id
+        };
+        // sends 'body'-object to general/frontpageUpdate to update the database
+        fetch(`http://localhost:5000/festivalreports/delete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getReports();
+          })
+          .catch(err => console.log(err));
+        break;
+      case "deletePartner":
+        body = {
+          id: id
+        };
+        // sends 'body'-object to general/frontpageUpdate to update the database
+        fetch(`http://localhost:5000/partners/delete`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        })
+          .then(_ => {
+            this.getPartners();
+          })
+          .catch(err => console.log(err));
         break;
       default:
     }
@@ -156,6 +200,7 @@ class AdminGeneral extends Component {
               <button
                 className="btn btn-secondary btnInElementAdmin btn-sm"
                 type="button"
+                id="toggleGeneralFormBtn"
                 data-toggle="collapse"
                 data-target="#frontPageForm"
                 aria-expanded="false"
@@ -166,15 +211,20 @@ class AdminGeneral extends Component {
             </div>
           </div>
           <div className="collapse editScheduleItem" id="frontPageForm">
-            {this.state.about.map(about => (
-              <AdminFrontpage key={about.id} about={about} />
-            ))}
+            <AdminFrontpage
+              key={this.state.about.id}
+              about={this.state.about}
+              getAboutData={this.getAboutData}
+            />
           </div>
           <h2>Om oss</h2>
           <div>
-            {this.state.about.map(about => (
-              <AdminAbout key={about.id} about={about} />
-            ))}
+            <AdminAbout
+              key={this.state.about.id}
+              getAboutData={this.getAboutData}
+              about={this.state.about}
+            />
+
             <div className="elementCardAdmin row">
               <p className="col-md-10">
                 <span className="smallHeading">Festivalrapporter</span>
@@ -193,13 +243,18 @@ class AdminGeneral extends Component {
               </div>
             </div>
             <div className="collapse reportsForm" id="reportsForm">
-              <form className="row addReport" onSubmit={this.addFestivalReport}>
+              <form
+                name="addReport"
+                className="row addReport"
+                onSubmit={this.handleSubmit}
+              >
                 <div className="col-md-3">
                   <input
                     type="text"
                     className="form-control"
                     placeholder="Navn på rapport"
                     ref="createReportTitle"
+                    required
                   />
                 </div>
                 <div className="col-md-3">
@@ -208,6 +263,7 @@ class AdminGeneral extends Component {
                     className="form-control"
                     placeholder="Link til rapport"
                     ref="createReportLink"
+                    required
                   />
                 </div>
 
@@ -221,10 +277,10 @@ class AdminGeneral extends Component {
                       type="radio"
                       id="no"
                       value="no"
-                      name="language"
+                      name="createReportLanguage"
                       ref="createReportNo"
-                      defaultChecked
                       onChange={this.handleChange}
+                      required
                     />
                     <label htmlFor="no">Norsk</label>
                   </div>
@@ -232,7 +288,7 @@ class AdminGeneral extends Component {
                     <input
                       type="radio"
                       id="en"
-                      name="language"
+                      name="createReportLanguage"
                       value="en"
                       ref="createReportEn"
                       onChange={this.handleChange}
@@ -250,7 +306,12 @@ class AdminGeneral extends Component {
                 </div>
               </form>
               {this.state.reports.map(report => (
-                <AdminFestivalReport key={report.id} report={report} />
+                <AdminFestivalReport
+                  key={report.id}
+                  report={report}
+                  handleDelete={this.handleDelete}
+                  getReports={this.getReports}
+                />
               ))}
             </div>
             <div className="elementCardAdmin row">
@@ -271,13 +332,18 @@ class AdminGeneral extends Component {
               </div>
             </div>
             <div className="collapse reportsForm" id="partnersForm">
-              <form className="row addReport" onSubmit={this.addPartner}>
+              <form
+                name="addPartner"
+                className="row addPartner"
+                onSubmit={this.handleSubmit}
+              >
                 <div className="col-md-4">
                   <input
                     ref="createPartnerName"
                     type="text"
                     className="form-control"
                     placeholder="Navn på samarbeidspartner"
+                    required
                   />
                 </div>
 
@@ -290,9 +356,10 @@ class AdminGeneral extends Component {
                     <input
                       type="radio"
                       id="private"
-                      name="partnerType"
+                      name="createPartnerType"
                       onChange={this.handleChange}
                       value="private"
+                      required
                     />
                     <label htmlFor="no">Lokal</label>
                   </div>
@@ -300,7 +367,7 @@ class AdminGeneral extends Component {
                     <input
                       type="radio"
                       id="official"
-                      name="partnerType"
+                      name="createPartnerType"
                       onChange={this.handleChange}
                       value="official"
                     />
@@ -336,33 +403,37 @@ class AdminGeneral extends Component {
                   className="collapse officialPartnerForm col-md-10 mb-5"
                   id="officialPartnerForm"
                 >
-                  {this.state.about.map(about => (
-                    <div
-                      key={about.id}
-                      className="form-group col-md-12 p-0 mb-5"
+                  <div
+                    key={this.state.about.id}
+                    className="form-group col-md-12 p-0 mb-5"
+                  >
+                    <form
+                      name="updatePartnerOfficialText"
+                      onSubmit={this.handleSubmit}
                     >
-                      <form onSubmit={this.updatePartnerOfficialText}>
-                        <label>Om offentlige samarbeidspartnere</label>
-                        <textarea
-                          className="form-control"
-                          name="partnerOfficialText"
-                          defaultValue={about.partner_txt_official}
-                          onChange={this.handleChange}
-                        />
-                        <button
-                          type="submit"
-                          className="btn btn-info btn-sm mt-1"
-                        >
-                          Lagre
-                        </button>
-                      </form>
-                    </div>
-                  ))}
+                      <label>Om offentlige samarbeidspartnere</label>
+                      <textarea
+                        className="form-control"
+                        ref="editPartnerOfficialText"
+                        defaultValue={this.state.about.partner_txt_official}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-info btn-sm mt-1"
+                      >
+                        Lagre
+                      </button>
+                    </form>
+                  </div>
 
                   {this.state.partners.map(partner => (
                     <div key={partner.id}>
                       {partner.type === "official" ? (
-                        <AdminPartner partner={partner} />
+                        <AdminPartner
+                          partner={partner}
+                          getPartners={this.getPartners}
+                          handleDelete={this.handleDelete}
+                        />
                       ) : null}
                     </div>
                   ))}
@@ -384,30 +455,38 @@ class AdminGeneral extends Component {
                   className="collapse localPartnerForm col-md-10"
                   id="localPartnerForm"
                 >
-                  {this.state.about.map(about => (
-                    <div key={about.id} className="form-group col-md-12 p-0">
-                      <form onSubmit={this.updatePartnerPrivateText}>
-                        <label>Om lokale samarbeidspartnere</label>
-                        <textarea
-                          className="form-control"
-                          name="partnerPrivateText"
-                          defaultValue={about.partner_txt_private}
-                          onChange={this.handleChange}
-                        />
-                        <button
-                          type="submit"
-                          className="btn btn-info btn-sm mt-1"
-                        >
-                          Lagre
-                        </button>
-                      </form>
-                    </div>
-                  ))}
+                  <div
+                    key={this.state.about.id}
+                    className="form-group col-md-12 p-0"
+                  >
+                    <form
+                      name="updatePartnerPrivateText"
+                      onSubmit={this.handleSubmit}
+                    >
+                      <label>Om lokale samarbeidspartnere</label>
+                      <textarea
+                        className="form-control"
+                        ref="editPartnerPrivateText"
+                        defaultValue={this.state.about.partner_txt_private}
+                      />
+                      <button
+                        type="submit"
+                        className="btn btn-info btn-sm mt-1"
+                      >
+                        Lagre
+                      </button>
+                    </form>
+                  </div>
 
                   {this.state.partners.map(partner => (
                     <div key={partner.id}>
                       {partner.type === "private" ? (
-                        <AdminPartner partner={partner} />
+                        <AdminPartner
+                          partner={partner}
+                          handleSubmit={this.handleSubmit}
+                          handleChange={this.handleChange}
+                          handleDelete={this.handleDelete}
+                        />
                       ) : null}
                     </div>
                   ))}
@@ -418,7 +497,11 @@ class AdminGeneral extends Component {
             <div>
               <h2>Kontaktpersoner</h2>
               {this.state.contactPersons.map(contact => (
-                <AdminContactPerson key={contact.id} contact={contact} />
+                <AdminContactPerson
+                  key={contact.id}
+                  contact={contact}
+                  getContactList={this.getContactList}
+                />
               ))}
             </div>
             <div>
@@ -442,9 +525,11 @@ class AdminGeneral extends Component {
                 </div>
               </div>
               <div className="collapse editScheduleItem" id="YTIDForm">
-                {this.state.livestream.map(livestream => (
-                  <AdminYouTube key={livestream.id} livestream={livestream} />
-                ))}
+                <AdminYouTube
+                  key={this.state.livestream.id}
+                  livestream={this.state.livestream}
+                  getLivestream={this.getLivestreamID}
+                />
               </div>
             </div>
           </div>

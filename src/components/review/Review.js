@@ -3,12 +3,13 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import EventList from "../EventList";
 import Slider from "./Slider";
+import {fixLineBreaks} from '../Functions';
 import "../../styles/review.css";
 
 class Review extends Component {
   state = {
     year: "",
-    text: "",
+    textArray: [],
     recordings: [],
     slides: []
   };
@@ -35,14 +36,13 @@ class Review extends Component {
       .then(response => {
         let data = {};
         data.year = year;
-        data.text = response.data.reviewData[0].text;
+        data.textArray = fixLineBreaks(response.data.reviewData[0].text);
         data.slides = response.data.slides;
         data.recordings = response.data.recordings;
         this.setState(data);
       })
       .catch(err => console.log(err));
   };
-
 
   render() {
     return (
@@ -53,7 +53,13 @@ class Review extends Component {
           <h1 className="yearHeading">{this.state.year}</h1>
 
           {/*  fix We have to regex body output to add paragraphs/headers if we don't do add html tags during input */}
-          <article>{this.state.text}</article>
+          <article>
+            {
+              this.state.textArray.map((paragraph, index) => (
+                <p key={index}>{paragraph}</p>
+              ))
+            }
+          </article>
           <div className="container">
             <div className="row">
               {this.state.year !== "" ? (

@@ -1,75 +1,41 @@
-// Class AdminYouTube
+// AdminPartner
 import React, { Component } from "react";
 class AdminPartner extends Component {
-  state = {
-    id: "",
-    name: "",
-    partnerType: ""
-  };
-
-  componentDidMount() {
-    // sets the props sent from parent 'AdminGeneral' as state
-    this.setState(({ ...this.state } = this.props.report));
-  }
-
-  // function for when submit button has been clicked
   handleSubmit = e => {
     e.preventDefault();
-    // saves the new changes in object 'body'
     let body = {
       id: this.props.partner.id,
-      partner_name: this.state.name,
-      type: this.state.partnerType
+      partner_name: this.refs.editPartnerName.value,
+      type: this.props.partner.type
     };
-    console.log(body);
     // sends 'body'-object to general/frontpageUpdate to update the database
     fetch(`http://localhost:5000/partners/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
-    }).catch(err => console.log(err));
+    })
+      .then(_ => {
+        this.props.getPartners();
+      })
+      .catch(err => console.log(err));
   };
-  // function for when fields have been changed
+
   handleChange = e => {
-    // checks name of target
-    switch (e.target.name) {
-      //if name equals 'livestream_id'..
-      case "name":
-        // .. it sets the value of target in state
-        this.setState({ name: e.target.value });
-        break;
-      case "partnerType":
-        console.log(e.target.value);
-        this.setState({ partnerType: e.target.value });
-        break;
-      default:
-    }
+    this.props.partner.type = e.target.value;
   };
-
-  // function for when submit button has been clicked
-  handleDelete = e => {
-    e.preventDefault();
-    // saves the new changes in object 'body'
-    let body = {
-      id: this.props.partner.id
-    };
-    // sends 'body'-object to general/frontpageUpdate to update the database
-    fetch(`http://localhost:5000/partners/delete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
   render() {
+    const { props } = this;
     return (
       <React.Fragment>
         <div className="m-1">
           <hr />
-          {this.props.partner.partner_name}
+          {props.partner.partner_name}
           <button
+            name="deletePartner"
             className="btn btn-sm btn-danger btnInElementAdmin"
-            onClick={this.handleDelete}
+            onClick={e => {
+              props.handleDelete(e, props.partner.id);
+            }}
           >
             Slett
           </button>
@@ -77,31 +43,34 @@ class AdminPartner extends Component {
             className="btn btn-secondary btnInElementAdmin btn-sm"
             type="button"
             data-toggle="collapse"
-            data-target={"#officialPartnerForm" + this.props.partner.id}
+            data-target={"#officialPartnerForm" + props.partner.id}
             aria-expanded="false"
-            aria-controls={"officialPartnerForm" + this.props.partner.id}
+            aria-controls={"officialPartnerForm" + props.partner.id}
           >
             Rediger
           </button>
           <div
-            id={"officialPartnerForm" + this.props.partner.id}
+            id={"officialPartnerForm" + props.partner.id}
             className={
               "collapse col-md-10 offset-r-2 officialPartnerForm" +
-              this.props.partner.id
+              props.partner.id
             }
           >
-            <form className="row m-3" onSubmit={this.handleSubmit}>
+            <form
+              name="editPartner"
+              className="row m-3"
+              onSubmit={this.handleSubmit}
+            >
               <div className="col-md-5">
                 <label>Navn på samarbeidspartner</label>
                 <input
                   className="form-control"
-                  onChange={this.handleChange}
-                  name="name"
-                  defaultValue={this.props.partner.partner_name}
+                  ref="editPartnerName"
+                  defaultValue={props.partner.partner_name}
                 />
               </div>
               {/* checks the value of the report language*/}
-              {this.props.partner.type === "private" ? (
+              {props.partner.type === "private" ? (
                 /* outputs radiobutton 'private' as defaultChecked
                    if type is set to 'private'*/
                 <div className="col-md-7">
@@ -111,7 +80,7 @@ class AdminPartner extends Component {
                     <input
                       type="radio"
                       id="private"
-                      name="partnerType"
+                      name="editPartnerType"
                       value="private"
                       defaultChecked
                       onChange={this.handleChange}
@@ -122,7 +91,7 @@ class AdminPartner extends Component {
                     <input
                       type="radio"
                       id="official"
-                      name="partnerType"
+                      name="editPartnerType"
                       value="official"
                       onChange={this.handleChange}
                     />
@@ -139,7 +108,7 @@ class AdminPartner extends Component {
                     <input
                       type="radio"
                       id="private"
-                      name="partnerType"
+                      name="editPartnerType"
                       value="private"
                       onChange={this.handleChange}
                     />
@@ -149,7 +118,7 @@ class AdminPartner extends Component {
                     <input
                       type="radio"
                       id="official"
-                      name="partnerType"
+                      name="editPartnerType"
                       value="official"
                       onChange={this.handleChange}
                       defaultChecked

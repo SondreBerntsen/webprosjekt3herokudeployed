@@ -1,73 +1,82 @@
+// AdminContactPerson.js
 import React, { Component } from "react";
 
 class AdminContactPerson extends Component {
-  state = {
-    id: "",
-    name: "",
-    role: "",
-    phone: "",
-    email: ""
-  };
-
-  componentDidMount() {
-    // sets the props sent from parent 'AdminGeneral' as state
-    this.setState(({ ...this.state } = this.props.contact));
-  }
-
-  // function for when submit button has been clicked
-  handleSubmit = e => {
-    e.preventDefault();
-    // saves the new changes in object 'body'
-    let body = {
-      id: this.state.id,
-      name: this.state.name,
-      role: this.state.role,
-      phone: this.state.phone,
-      email: this.state.email
-    };
-    // sends 'body'-object to general/frontpageUpdate to update the database
-    fetch(`http://localhost:5000/contactPersons/update`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-  // function for when fields have been changed
+  state = {};
   handleChange = e => {
-    // checks name of target
+    e.preventDefault();
     switch (e.target.name) {
-      //if name equals 'livestream_id'..
-      case "name":
-        // .. it sets the value of target in state
-        this.setState({ name: e.target.value });
+      // editing contact persons
+      case "editContactPersonName":
+        this.setState({ editContactPersonName: e.target.value });
         break;
-      case "role":
-        this.setState({ role: e.target.value });
+      case "editContactPersonRole":
+        this.setState({ editContactPersonRole: e.target.value });
         break;
-      case "phone":
-        this.setState({ phone: e.target.value });
+      case "editContactPersonPhone":
+        this.setState({ editContactPersonPhone: e.target.value });
         break;
-      case "email":
-        this.setState({ email: e.target.value });
+      case "editContactPersonEmail":
+        this.setState({ editContactPersonEmail: e.target.value });
         break;
       default:
     }
   };
+  handleSubmit = e => {
+    e.preventDefault();
+    const data = new FormData();
+
+    if (this.refs.contactImg.files[0] !== undefined) {
+      data.append("id", this.props.contact.id);
+      data.append("img", this.refs.contactImg.files[0]);
+      data.append("name", this.refs.editContactPersonName.value);
+      data.append("role", this.refs.editContactPersonRole.value);
+      data.append("phone", this.refs.editContactPersonPhone.value);
+      data.append("email", this.refs.editContactPersonEmail.value);
+      // sends 'body'-object to general/frontpageUpdate to update the database
+      fetch(`http://localhost:5000/contactPersons/updateWithPicture`, {
+        method: "POST",
+        body: data
+      })
+        .then(_ => {
+          this.props.getContactList();
+        })
+        .catch(err => console.log(err));
+    } else {
+      data.append("id", this.props.contact.id);
+      data.append("name", this.refs.editContactPersonName.value);
+      data.append("role", this.refs.editContactPersonRole.value);
+      data.append("phone", this.refs.editContactPersonPhone.value);
+      data.append("email", this.refs.editContactPersonEmail.value);
+      // sends 'body'-object to general/frontpageUpdate to update the database
+      fetch(`http://localhost:5000/contactPersons/updateWithoutPicture`, {
+        method: "POST",
+        body: data
+      })
+        .then(_ => {
+          this.props.getContactList();
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
   render() {
+    const { props } = this;
+
     return (
       <div>
         <div className="elementCardAdmin row">
           <p className="col-md-10">
-            <span className="smallHeading">{this.props.contact.name}</span>
+            <span className="smallHeading">{props.contact.name}</span>
           </p>
           <div className="col-md-2">
             <button
               className="btn btn-secondary btnInElementAdmin btn-sm"
               type="button"
               data-toggle="collapse"
-              data-target={"#contactPersonForm" + this.props.contact.id}
+              data-target={"#contactPersonForm" + props.contact.id}
               aria-expanded="false"
-              aria-controls={"contactPersonForm" + this.props.contact.id}
+              aria-controls={"contactPersonForm" + props.contact.id}
             >
               Rediger
             </button>
@@ -76,28 +85,30 @@ class AdminContactPerson extends Component {
 
         <div
           className="collapse editScheduleItem"
-          id={"contactPersonForm" + this.props.contact.id}
+          id={"contactPersonForm" + props.contact.id}
         >
-          <form className="col-md-8 col-lg-6" onSubmit={this.handleSubmit}>
+          <form
+            className="col-md-8 col-lg-6"
+            name="editContactPerson"
+            onSubmit={this.handleSubmit}
+          >
             <div className="form-row">
               <div className="form-group col-md-6 pl-0">
                 <label>Navn</label>
                 <input
                   type="text"
-                  name="name"
-                  defaultValue={this.props.contact.name}
+                  ref="editContactPersonName"
+                  defaultValue={props.contact.name}
                   className="form-control"
-                  onChange={this.handleChange}
                 />
               </div>
               <div className="form-group col-md-6 pl-0">
                 <label>Stilling</label>
                 <input
                   type="text"
-                  name="role"
-                  defaultValue={this.props.contact.role}
+                  ref="editContactPersonRole"
+                  defaultValue={props.contact.role}
                   className="form-control"
-                  onChange={this.handleChange}
                 />
               </div>
             </div>
@@ -106,37 +117,37 @@ class AdminContactPerson extends Component {
                 <label>Telefonnummer</label>
                 <input
                   type="number"
-                  name="phone"
-                  defaultValue={this.props.contact.phone}
+                  ref="editContactPersonPhone"
+                  defaultValue={props.contact.phone}
                   className="form-control"
-                  onChange={this.handleChange}
                 />
               </div>
               <div className="form-group col-md-6 pl-0">
                 <label>Epost adresse</label>
                 <input
                   type="email"
-                  name="email"
-                  defaultValue={this.props.contact.email}
+                  ref="editContactPersonEmail"
+                  defaultValue={props.contact.email}
                   className="form-control"
-                  onChange={this.handleChange}
                 />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group col-md-12 pl-0">
                 <label> Bilde</label>
-                <input type="file" className="form-control" />
+                <input type="file" ref="contactImg" className="form-control" />
               </div>
-              {this.props.contact.id !== "" ? (
+              {props.contact.id !== "" ? (
                 <img
-                  className="contactImgEdit "
+                  className="contactImgEdit"
                   src={require("../../uploadedImg/contactPersonImg/" +
-                    this.props.contact.id)}
+                    props.contact.id)}
                   alt="contactpersonImg"
+                  id="contactpersonImg"
                 />
               ) : null}
             </div>
+
             <button type="submit" className="btn btn-info btn-sm">
               Lagre
             </button>

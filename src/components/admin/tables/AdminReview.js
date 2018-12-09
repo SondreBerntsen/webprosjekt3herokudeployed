@@ -12,7 +12,6 @@ class AdminReview extends Component {
       .then(response => response.json())
       .then(response => this.structureData(response.data))
       .catch(err => console.log(err))
-    console.log(this.state)
   }
 
   structureData = (data) => {
@@ -32,6 +31,28 @@ class AdminReview extends Component {
     }
     this.setState({ years: years })
   }
+
+  handleSubmit = () => {
+    let body = {
+      year: this.refs.newYear.value,
+      text: this.refs.newText.value
+    }
+    console.log(body)
+
+    fetch('http://localhost:5000/review/newReview', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    })
+    .then((response) => {
+      response.json()
+      this.refs.newYear.value = ''
+      this.refs.newText.value = ''
+      this.refs.newReviewForm.click()
+      this.getData()
+    })
+    .catch(err => console.log(err))
+  }
   render() {
     return (
       <>
@@ -39,6 +60,7 @@ class AdminReview extends Component {
           <button
             className=" createNewBtn btn btn-info btn-sm"
             type="button"
+            ref="newReviewForm"
             data-toggle="collapse"
             data-target="#newReviewForm"
             aria-expanded="false"
@@ -49,29 +71,30 @@ class AdminReview extends Component {
           <div className="collapseForm col-12 collapse" id="newReviewForm">
             <form className="col-md-8 col-lg-6">
               <div className="form-row">
-                <label>År</label>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="Legg til år"
-                />
-              </div>
-              <div className="form-row">
-                <label>Bilde</label>
-                <input
-                  type="file"
-                  className="form-control"
-                />
+                <div className="form-group col-md-2">
+                  <label>År</label>
+                  <input
+                    type="number"
+                    ref="newYear"
+                    className="form-control"
+                  ></input>
+                </div>
               </div>
               <div className="form-group">
                 <label>Tekst</label>
-                <textarea type="text" className="form-control" />
+                <textarea 
+                  type="text" 
+                  ref="newText"
+                  className="form-control" />
               </div>
-              <button type="submit" className="btn btn-info btn-sm">
+              <button type="button" onClick={this.handleSubmit} className="btn btn-info btn-sm">
                 Send
               </button>
+              <p>*Du kan redigere og legge til bilder og opptak etter du har opprettet elementet</p>
             </form>
           </div>
+
+          {/* Lists all existing review elements */}
           {this.state.years.map((year, index) => (
             <AdminReviewItem key={index} year={year} />
           ))}

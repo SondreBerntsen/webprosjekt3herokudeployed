@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Navbar from "../Navbar";
 import Footer from "../Footer";
 import NewsCards from "../NewsCards";
-import { Link } from "react-router-dom";
+import {NavLink} from "react-router-dom";
 import "../../styles/news.css";
 class News extends Component {
   state = {
@@ -43,17 +43,16 @@ class News extends Component {
               <div className="container mx-auto ">
                 <h2 className="pageTitle">Nyheter</h2>
                 <hr className="hrHeight" />
-                <div className="newsYearLinks">
-                  {console.log(this.state.year)}
+                <div className="newsYearLinks row">
                   {this.state.years.map(function (year) {
                     return (
-                      <Link
-                        className="btn newsYearLink"
+                      <NavLink
+                        className=" newsYearLink"
                         to={"/nyheter/" + year.year}
                         key={year.year}
                       >
                         {year.year}
-                      </Link>
+                      </NavLink>
                     );
                   })}
                 </div>

@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AdminUser from "../AdminUser";
-import swal from 'sweetalert';
 
 class AdminUsers extends Component {
   state = {

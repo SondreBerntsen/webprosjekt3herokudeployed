@@ -12,7 +12,7 @@
   margin-top: 50px;
 }
 .newsDiv {
-  height: 400px;
+  min-height: 450px;
   position: relative;
   margin-top: 20px;
 }
@@ -32,9 +32,10 @@
   display: block;
 }
 .textNewsDiv {
-  background-color: lightgray;
+  background-color: rgb(236, 236, 236);
   padding: 10px;
   color: black;
+  min-height: 180px;
 }
 .dateOnNewsImg {
   position: absolute;
@@ -42,9 +43,25 @@
   left: 16px;
   background-color: #822a40;
   color: white;
-  padding: 5px;
+  padding: 10px 20px 10px 20px;
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
+}
+.newsYearLinks{
+  background-color:#822a40;
+  border-radius: 10px;
+  padding:10px;
+}
+.newsYearLink{
+  color:white ;
+  margin: 0px 20px 0px 20px;
+}
+.newsYearLink:hover{
+  color: #e28e6a ;
+  text-decoration: none;
+}
+.newsYearLink.active{
+  color: #e28e6a ;
 }
 /****Article****/
 .imgNewsArticle {

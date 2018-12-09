@@ -3,6 +3,9 @@ import { NavLink } from "react-router-dom";
 
 
 class AdminNav extends Component {
+  state = {
+    userType: 'Admin'
+  }
   render() {
     return (
       <nav className="navbar navbar-expand-lg  navbar-dark adminSideBarNav col-md-3 col-lg-2">
@@ -37,6 +40,11 @@ class AdminNav extends Component {
               </NavLink>
             </li>
             <li className="nav-item py-1">
+              <NavLink className="linkTxt" to="/admin/review">
+                Tilbakeblikk
+              </NavLink>
+            </li>
+            <li className="nav-item py-1">
               <NavLink className="linkTxt" to="/admin/general">
                 Generelt
               </NavLink>
@@ -44,11 +52,6 @@ class AdminNav extends Component {
             <li className="nav-item py-1">
               <NavLink className="linkTxt" to="/admin/users">
                 Brukere
-              </NavLink>
-            </li>
-            <li className="nav-item py-1">
-              <NavLink className="linkTxt" to="/admin/review">
-                Tilbakeblikk
               </NavLink>
             </li>
             <li className="nav-item py-1">

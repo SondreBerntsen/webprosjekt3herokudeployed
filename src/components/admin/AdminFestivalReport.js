@@ -1,77 +1,42 @@
-// Class AdminYouTube
+// AdminFestivalReport
 import React, { Component } from "react";
 class AdminFestivalReport extends Component {
-  state = {
-    title: "",
-    link: "",
-    language: ""
-  };
-
-  componentDidMount() {
-    // sets the props sent from parent 'AdminGeneral' as state
-    this.setState(({ ...this.state } = this.props.report));
-  }
-
-  // function for when submit button has been clicked
   handleSubmit = e => {
     e.preventDefault();
-    // saves the new changes in object 'body'
     let body = {
-      id: this.state.id,
-      title: this.state.title,
-      link: this.state.link,
-      language: this.state.language
+      id: this.props.report.id,
+      title: this.refs.editReportTitle.value,
+      link: this.refs.editReportLink.value,
+      language: this.props.report.language
     };
-    // sends 'body'-object to general/frontpageUpdate to update the database
+    // sends 'body'-object to festivalreports/update to update the database
     fetch(`http://localhost:5000/festivalreports/update`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
-    }).catch(err => console.log(err));
+    })
+      .then(_ => {
+        this.props.getReports();
+      })
+      .catch(err => console.log(err));
   };
-  // function for when fields have been changed
+
   handleChange = e => {
-    // checks name of target
-    switch (e.target.name) {
-      //if name equals 'livestream_id'..
-      case "title":
-        // .. it sets the value of target in state
-        this.setState({ title: e.target.value });
-        break;
-      case "link":
-        this.setState({ link: e.target.value });
-        break;
-      case "language":
-        this.setState({ language: e.target.value });
-        break;
-      default:
-    }
+    this.props.report.language = e.target.value;
   };
-
-  // function for when submit button has been clicked
-  handleDelete = e => {
-    e.preventDefault();
-    // saves the new changes in object 'body'
-    let body = {
-      id: this.state.id
-    };
-    // sends 'body'-object to general/frontpageUpdate to update the database
-    fetch(`http://localhost:5000/festivalreports/delete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    }).catch(err => console.log(err));
-  };
-
   render() {
+    const { props } = this;
     return (
       <React.Fragment>
         <div className="listReports">
           <hr />
-          <p className="festivalReportTitle">{this.props.report.title}</p>
+          <p className="festivalReportTitle">{props.report.title}</p>
           <button
+            name="deleteReport"
             className="btn btn-sm btn-danger btnInElementAdmin"
-            onClick={this.handleDelete}
+            onClick={e => {
+              props.handleDelete(e, props.report.id);
+            }}
           >
             Slett
           </button>
@@ -79,38 +44,40 @@ class AdminFestivalReport extends Component {
             className="btn btn-secondary btnInElementAdmin btn-sm"
             type="button"
             data-toggle="collapse"
-            data-target={"#reportForm" + this.props.report.id}
+            data-target={"#reportForm" + props.report.id}
             aria-expanded="false"
-            aria-controls={"reportForm" + this.props.report.id}
+            aria-controls={"reportForm" + props.report.id}
           >
             Rediger
           </button>
 
           <div
             className="collapse editReports col-md-8 offset-2"
-            id={"reportForm" + this.props.report.id}
+            id={"reportForm" + props.report.id}
           >
-            <form className="row m-3" onSubmit={this.handleSubmit}>
+            <form
+              className="row m-3"
+              name="editReport"
+              onSubmit={this.handleSubmit}
+            >
               <div className="col-md-4">
                 <label>Tittel</label>
                 <input
                   className="form-control"
-                  name="title"
-                  defaultValue={this.props.report.title}
-                  onChange={this.handleChange}
+                  ref="editReportTitle"
+                  defaultValue={props.report.title}
                 />
               </div>
               <div className="col-md-5">
                 <label>Link</label>
                 <input
                   className="form-control"
-                  name="link"
-                  defaultValue={this.props.report.link}
-                  onChange={this.handleChange}
+                  ref="editReportLink"
+                  defaultValue={props.report.link}
                 />
               </div>
               {/* checks the value of the report language*/}
-              {this.props.report.language === "no" ? (
+              {props.report.language === "no" ? (
                 /* outputs radiobutton 'no' as defaultChecked
                    if language is set to 'no'*/
                 <div className="col-md-3">
@@ -119,7 +86,7 @@ class AdminFestivalReport extends Component {
                     <input
                       type="radio"
                       id="no"
-                      name="language"
+                      name="editReportLanguage"
                       value="no"
                       onChange={this.handleChange}
                       defaultChecked
@@ -132,7 +99,7 @@ class AdminFestivalReport extends Component {
                     <input
                       type="radio"
                       id="en"
-                      name="language"
+                      name="editReportLanguage"
                       value="en"
                       onChange={this.handleChange}
                     />
@@ -150,7 +117,7 @@ class AdminFestivalReport extends Component {
                     <input
                       type="radio"
                       id="no"
-                      name="language"
+                      name="editReportLanguage"
                       value="no"
                       onChange={this.handleChange}
                     />
@@ -162,7 +129,7 @@ class AdminFestivalReport extends Component {
                     <input
                       type="radio"
                       id="en"
-                      name="language"
+                      name="editReportLanguage"
                       value="en"
                       onChange={this.handleChange}
                       defaultChecked
@@ -174,7 +141,7 @@ class AdminFestivalReport extends Component {
                 </div>
               )}
               ;
-              <div className="col-md-12 float-left mt-3">
+              <div className="col-md-12 float-left mb-3 mt-1">
                 <button type="submit" className="btn btn-info btn-sm">
                   Lagre
                 </button>
