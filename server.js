@@ -1,9 +1,13 @@
 const express = require("express");
+const path = require('path');
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client/')));
 
 var navbar = require("./navbar");
 var home = require("./home");
@@ -29,11 +33,6 @@ var livestream = require("./livestream");
 var settings = require("./settings");
 var adminLogin = require("./adminLogin");
 
-app.get("/", (req, res) => {
-  /*fix*/
-  res.send("jille greiå");
-});
-
 app.use("/api/navbar", navbar);
 app.use("/api/home", home);
 app.use("/api/programme", programme);
@@ -58,6 +57,9 @@ app.use("/api/livestream", livestream);
 app.use("/api/settings", settings);
 app.use("/api/adminLogin", adminLogin);
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server started on port ${port}`));
