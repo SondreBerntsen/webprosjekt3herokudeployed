@@ -7,7 +7,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/')));
+app.use(express.static(path.join(__dirname, 'client/build')));
 
 var navbar = require("./navbar");
 var home = require("./home");
