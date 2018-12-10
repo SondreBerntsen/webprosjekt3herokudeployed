@@ -17,7 +17,7 @@ class Home extends Component {
     this.getData()
   }
   getData = () => {
-    fetch("http://localhost:5000/home")
+    fetch("http://localhost:3000/home")
       .then(response => response.json())
       .then(response => {
         this.checkStatus(response.data[0])
