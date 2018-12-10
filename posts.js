@@ -39,7 +39,7 @@ posts.post("/add", (req, res) => {
             console.log(err);
             return res.status(400).send("Database not updated");
         } else {//If data went into database, create the image in folder
-            imgFile.mv(`${__dirname}/../react-app/src/uploadedImg/postImg/${results.insertId}`, function (err) {
+            imgFile.mv(`${__dirname}/../../client/src/uploadedImg/postImg/${results.insertId}`, function (err) {
                 if (err) {
                     return res.status(500).send(err);
                 }
@@ -64,7 +64,7 @@ posts.post("/update", (req, res) => {
         } else {
             if (req.files !== null) {//if image file exists 
                 let newImgFile = req.files.img;
-                newImgFile.mv(`${__dirname}/../react-app/src/uploadedImg/postImg/${id}`, function (err) {
+                newImgFile.mv(`${__dirname}/../../client/src/uploadedImg/postImg/${id}`, function (err) {
                     if (err) {
                         return res.status(500).send(err);
                     }
@@ -83,7 +83,7 @@ posts.post("/delete", (req, res) => {
         if (err) {
             return res.send(err);
         } else {//delete the image from the folder
-            fs.unlink('../react-app/src/uploadedImg/postImg/' + req.body.id, (err) => {
+            fs.unlink('../../client/src/uploadedImg/postImg/' + req.body.id, (err) => {
                 if (err) {
                     console.log('image was not deleted');
                 } else {

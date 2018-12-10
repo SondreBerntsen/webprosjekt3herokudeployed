@@ -34,7 +34,7 @@ event.post("/add", (req, res) => {
       return res.status(400).send("Database not updated");
     } else {
       imgFile.mv(
-        `${__dirname}/../react-app/src/uploadedImg/eventImg/${
+        `${__dirname}/../../client/src/uploadedImg/eventImg/${
           results.insertId
         }`,
         function(err) {
@@ -58,7 +58,7 @@ event.post("/delete", (req, res) => {
       return res.send(err);
     } else {
       //delete the image from the folder
-      fs.unlink("../react-app/src/uploadedImg/eventImg/" + req.body.id, err => {
+      fs.unlink("../../client/src/uploadedImg/eventImg/" + req.body.id, err => {
         if (err) {
           console.log("image was not deleted");
         }
@@ -105,7 +105,7 @@ event.post("/update", (req, res) => {
         return res.status(400).send("Database not updated");
       } else {
         imgFile.mv(
-          `${__dirname}/../react-app/src/uploadedImg/eventImg/${id}`,
+          `${__dirname}/../../client/src/uploadedImg/eventImg/${id}`,
           function(err) {
             if (err) {
               return res.status(500).send(err);

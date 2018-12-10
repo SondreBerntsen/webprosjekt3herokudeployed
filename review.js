@@ -90,7 +90,7 @@ review.post('/deleteReview', (req, res) => {
     if (err) res.send(err);
     else{
       slides.forEach((image) => {
-        fs.unlink('../react-app/src/uploadedImg/sliderImg/' + image.id, (err) => {
+        fs.unlink('../../client/src/uploadedImg/sliderImg/' + image.id, (err) => {
           if (err) {
             console.log('image was not deleted');
           } else {
@@ -140,7 +140,7 @@ review.post("/newImage", (req, res) => {
   db.query(QUERY, (err, results) => {
     if (err) res.send(err)
     else {
-      imgFile.mv(`${__dirname}/../react-app/src/uploadedImg/sliderImg/${results.insertId}`, function (err) {
+      imgFile.mv(`${__dirname}/../../client/src/uploadedImg/sliderImg/${results.insertId}`, function (err) {
         if (err) {
           return res.status(500).send(err);
         }
@@ -172,7 +172,7 @@ review.post("/deleteImage", (req, res) => {
     if (err) {
         return res.send(err);
     } else {//delete the image from the folder
-      fs.unlink('../react-app/src/uploadedImg/sliderImg/' + req.body.id, (err) => {
+      fs.unlink('../../client/src/uploadedImg/sliderImg/' + req.body.id, (err) => {
         if (err) {
           console.log('image was not deleted');
         } else {
