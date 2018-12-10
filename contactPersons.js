@@ -23,8 +23,9 @@ contactPersons.get("/", (req, res) => {
 // updating contact persons
 contactPersons.post("/update", (req, res) => {
   // if image has been updated
-  if (req.files !== null) {
-    let imgFile = req.files.img;
+  if (req.body.img !== null) {
+    console.log(req.body);
+    let imgFile = req.body.img;
     let { id, name, email, role, phone } = req.body;
     let UPDATE_QUERY = `UPDATE contact_persons 
     SET 

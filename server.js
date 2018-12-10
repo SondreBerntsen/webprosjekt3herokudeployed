@@ -1,35 +1,63 @@
-const {createServer} = require('http');
-const express = require('express');
-const compression = require('compression');
-const morgan = require('morgan');
-const path = require('path');
+const express = require("express");
+const cors = require("cors");
+const bodyParser = require("body-parser");
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
 
-const normalizePort = port => parseInt(port, 10)
-const PORT = normalizePort(process.env.PORT || 5000)
+var navbar = require("./navbar");
+var home = require("./home");
+var programme = require("./programme");
+var events = require("./events");
+var partners = require("./partners");
+var festivalreports = require("./festivalreports");
+var general = require("./general");
+var review = require("./review");
+var anniversary = require("./anniversary");
+var contactPersons = require("./contactPersons");
+var event = require("./event");
+var posts = require("./posts");
+var newsArticle = require("./newsArticle");
+var newsYearList = require("./newsYearList");
+var scheduledLiveStream = require("./scheduledLiveStream");
+var contactAddress = require("./contactAddress");
+var venues = require("./venues");
+var eventList = require("./eventList");
+var eventYearList = require("./eventYearList");
+var adminUsers = require("./adminUsers");
+var livestream = require("./livestream");
+var settings = require("./settings");
+var adminLogin = require("./adminLogin");
 
-const app = express()
-const dev = app.get('env') !== 'production'
+app.get("/", (req, res) => {
+  /*fix*/
+  res.send("jille greiå");
+});
 
-if (!dev) {
-    app.disable('x-powered-by')
-    app.use(compression())
-    app.use(morgan('common'))
+app.use("/api/navbar", navbar);
+app.use("/api/home", home);
+app.use("/api/programme", programme);
+app.use("/api/events", events);
+app.use("/api/partners", partners);
+app.use("/api/festivalreports", festivalreports);
+app.use("/api/general", general);
+app.use("/api/review", review);
+app.use("/api/anniversary", anniversary);
+app.use("/api/contactPersons", contactPersons);
+app.use("/api/event", event);
+app.use("/api/posts", posts);
+app.use("/api/newsArticle", newsArticle);
+app.use("/api/newsYearList", newsYearList);
+app.use("/api/scheduledLiveStream", scheduledLiveStream);
+app.use("/api/contactAddress", contactAddress);
+app.use("/api/venues", venues);
+app.use("/api/eventList", eventList);
+app.use("/api/eventYearList", eventYearList);
+app.use("/api/adminUsers", adminUsers);
+app.use("/api/livestream", livestream);
+app.use("/api/settings", settings);
+app.use("/api/adminLogin", adminLogin);
 
-    app.use(express.static(path.resolve(__dirname, 'build')))
 
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'build', 'index.html'))
-    })
-}
-
-if (dev) {
-    app.use(morgan('dev'))
-}
-
-const server = createServer(app)
-
-server.listen(PORT, err => {
-    if (err) throw err;
-
-    console.log('Server started');
-})
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server started on port ${port}`));

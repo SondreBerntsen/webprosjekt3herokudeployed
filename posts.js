@@ -1,3 +1,5 @@
+//File that handles everything with posts
+//Gets all data, adds new data, updates data, and deletes data
 const express = require('express');
 var db = require('./db');
 const posts = express.Router();
@@ -5,7 +7,7 @@ const fileUpload = require('express-fileupload');
 var fs = require('fs');
 
 posts.use(fileUpload());
-
+//gets data about the posts
 posts.get("/", (req, res) => {
     const { year } = req.query;
     let SELECT_ALL_POSTS_QUERY;
@@ -24,19 +26,19 @@ posts.get("/", (req, res) => {
         }
     });
 });
+//Adds a new post(newsarticle)
 posts.post("/add", (req, res) => {
-    console.log('hallo add post express');
     let imgFile = req.files.img;
 
     const INSERT_QUERY = `
       INSERT INTO posts (title, text, date) 
       VALUES ('${req.body.title}', '${req.body.text}', CURDATE())`;
 
-    db.query(INSERT_QUERY, (err, results) => {
-        if (err) {
+    db.query(INSERT_QUERY, (err, results) => {//Inserts in to the database
+        if (err) {//if error
             console.log(err);
             return res.status(400).send("Database not updated");
-        } else {
+        } else {//If data went into database, create the image in folder
             imgFile.mv(`${__dirname}/../react-app/src/uploadedImg/postImg/${results.insertId}`, function (err) {
                 if (err) {
                     return res.status(500).send(err);
@@ -46,11 +48,38 @@ posts.post("/add", (req, res) => {
         }
     });
 });
+//Updates the post
+posts.post("/update", (req, res) => {
+
+    const { id, title, text } = req.body
+
+    const UPDATE_QUERY = `
+      UPDATE posts
+      SET title = '${title}', text = '${text}'
+      WHERE id = '${id}'
+    `
+    db.query(UPDATE_QUERY, (err, results) => {
+        if (err) {
+            return res.status(400).send("Database not updated");
+        } else {
+            if (req.files !== null) {//if image file exists 
+                let newImgFile = req.files.img;
+                newImgFile.mv(`${__dirname}/../react-app/src/uploadedImg/postImg/${id}`, function (err) {
+                    if (err) {
+                        return res.status(500).send(err);
+                    }
+                });
+            }
+            return res.json(results);
+        }
+    });
+
+});
+//Deletes post
 posts.post("/delete", (req, res) => {
-    console.log('hallo delete post');
     const { id } = req.body
     const DELETE_QUERY = `DELETE FROM posts WHERE id = ${id}`
-    db.query(DELETE_QUERY, (err, results) => {
+    db.query(DELETE_QUERY, (err, results) => {//deletes post from database
         if (err) {
             return res.send(err);
         } else {//delete the image from the folder

@@ -4,7 +4,7 @@ const home = express.Router()
 
 //Gets all home in a given year
 home.get("/", (req, res) => {
-  const HOME_QUERY = `
+  const QUERY = `
     SELECT 
       general.pitch, 
       general.dateHeader_txt, 
@@ -14,7 +14,7 @@ home.get("/", (req, res) => {
     FROM general, status 
     WHERE general.id = status.id`;
 
-  db.query(HOME_QUERY, (err, results) => {
+  db.query(QUERY, (err, results) => {
     if (err) {
       return res.send(err)
     }
@@ -22,6 +22,21 @@ home.get("/", (req, res) => {
       return res.json({
         data: results
       })
+    }
+  })
+})
+
+home.get("/latestReview", (req, res) => {
+  const QUERY = `
+    SELECT DISTINCT MAX(year) AS year
+    FROM review
+  `
+  db.query(QUERY, (err, results) => {
+    if (err) {
+      return res.send(err)
+    }
+    else{
+      return res.json(results)
     }
   })
 })
