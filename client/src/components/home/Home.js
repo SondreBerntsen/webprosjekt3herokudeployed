@@ -93,7 +93,7 @@ class Home extends Component {
               this.state.content.status === "active" && <div className="row "><EventList year={this.state.year} /></div>
             }
           </div>
-          {this.state.content.anniversary === "on" && <Timeline />}
+          {this.state.content.anniversary === true && <Timeline />}
           <Footer />
         </div>
       </React.Fragment>
