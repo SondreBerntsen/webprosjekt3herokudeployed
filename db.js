@@ -11,11 +11,11 @@ db.connect((err) => {
         return err;
     } else {
         console.log('You are connected to the database');
+        setInterval(function () {
+          db.query('SELECT 1');
+        }, 5000);
     }
 });
 
-setInterval(function () {
-  db.query('SELECT 1');
-}, 5000);
 
 module.exports = db;
