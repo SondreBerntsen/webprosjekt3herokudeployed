@@ -16,13 +16,13 @@ class Contact extends Component {
     this.getContactAdress();
   }
   getContactAdress = _ => {
-    fetch(`http://localhost:5000/contactAddress`)
+    fetch(`/api/contactAddress`)
       .then(response => response.json())
       .then(response => this.setState({ contactAddress: response[0].address }))
       .catch(err => console.error(err));
   };
   getContactPersons = _ => {
-    fetch(`http://localhost:5000/contactPersons`)
+    fetch(`/api/contactPersons`)
       .then(response => response.json())
       .then(response => this.setState({ contactPersons: response.data }))
       .catch(err => console.error(err));
