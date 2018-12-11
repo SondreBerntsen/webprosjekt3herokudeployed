@@ -58,13 +58,13 @@ class Home extends Component {
             <img className="logoImg  col-sm-12 col-md-5 " src={require('../../img/logo.png')} alt="logo" />
             <p className="headerText pitch">{this.state.content.pitch}</p>
             {
-              this.state.content.status === "active" 
-              ? 
-              <p className="dateHeader">{this.state.content.date}</p>
-              :
-              <>
-                <h1 className="bigHeaderHome">Takk for i år!</h1>
-              </>
+              this.state.content.status === "active"
+                ?
+                <p className="dateHeader">{this.state.content.date}</p>
+                :
+                <>
+                  <h1 className="bigHeaderHome">Takk for i år!</h1>
+                </>
             }
 
             {
@@ -75,16 +75,16 @@ class Home extends Component {
               )
             }
             {
-              this.state.content.status === "active" 
-              ?
-              <div className="row col-md-8 btnHeaderDiv">
-                <Link to="/program" className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Program</Link>
-                <a href="#eventsHome" className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Lineup</a>
-              </div>
-              :
-              <div className="row col-md-8 btnHeaderDiv">
-                <Link to={"/tilbakeblikk/" + this.state.content.latestReview} className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Tilbakeblikk!</Link>
-              </div>
+              this.state.content.status === "active"
+                ?
+                <div className="row col-md-8 btnHeaderDiv">
+                  <Link to="/program" className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Program</Link>
+                  <a href="#eventsHome" className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Lineup</a>
+                </div>
+                :
+                <div className="row col-md-8 btnHeaderDiv">
+                  <Link to={"/tilbakeblikk/" + this.state.content.latestReview} className="btnHeader btn col-sm-12 col-md-10 col-lg-5">Tilbakeblikk!</Link>
+                </div>
             }
           </div>
           <div className="container mx-auto" id="eventsHome">

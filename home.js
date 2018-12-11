@@ -7,8 +7,7 @@ home.get("/", (req, res) => {
   const QUERY = `
     SELECT 
       general.pitch, 
-      general.dateHeader_txt, 
-      general.inactiveHeader_txt, 
+      general.dateHeader_txt,
       status.anniversary, 
       status.status 
     FROM general, status 
