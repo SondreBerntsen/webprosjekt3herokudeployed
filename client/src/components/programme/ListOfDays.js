@@ -2,7 +2,6 @@ import React from 'react'
 import {fixDateString} from '../Functions'
 
 const listOfDays = (props) => {
-  console.log(props)
   return (
     <div className="container horizontal_days row">
       {
