@@ -53,13 +53,13 @@ class AdminEvents extends Component {
   }
 
   getVenues = _ => {
-    fetch(`http://localhost:5000/venues`)
+    fetch(`/api/venues`)
       .then(response => response.json())
       .then(response => this.setState({ venues: response }))
       .catch(err => console.log(err));
   };
   getEventYears = _ => {
-    fetch(`http://localhost:5000/eventYearList`)
+    fetch(`/api/eventYearList`)
       .then(response => response.json())
       .then(response =>
         this.setState({ years: response }, () => {
@@ -81,12 +81,12 @@ class AdminEvents extends Component {
   getEventList = _ => {
     let path = this.props.match.params.year;
     if (isNaN(path)) {
-      fetch(`http://localhost:5000/eventList`)
+      fetch(`/api/eventList`)
         .then(response => response.json())
         .then(response => this.setState({ events: response }))
         .catch(err => console.log(err));
     } else {
-      fetch(`http://localhost:5000/eventList?year=` + path)
+      fetch(`/api/eventList?year=` + path)
         .then(response => response.json())
         .then(response => this.setState({ events: response }))
         .catch(err => console.log(err));
@@ -105,7 +105,7 @@ class AdminEvents extends Component {
     if (
       window.confirm("Er du sikker på at du vil slette dette arranementet?")
     ) {
-      fetch(`http://localhost:5000/event/delete`, {
+      fetch(`/api/event/delete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -131,7 +131,7 @@ class AdminEvents extends Component {
     data.append("venue", this.refs.createEventVenue.value);
     data.append("livestream", this.state.livestream);
 
-    fetch(`http://localhost:5000/event/add`, {
+    fetch(`/api/event/add`, {
       method: "POST",
       body: data
     })

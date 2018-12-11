@@ -87,7 +87,7 @@ class AdminPostItem extends Component {
     data.append("text", this.refs.updateText.value);
     data.append("img", this.state.base64Image);
 
-    fetch(`http://localhost:5000/posts/update`, {
+    fetch(`/api/posts/update`, {
       method: "POST",
       body: data
     })

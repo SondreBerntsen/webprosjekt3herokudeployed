@@ -39,7 +39,7 @@ class AdminPosts extends Component {
   }
 
   getYearList = _ => {
-    fetch(`http://localhost:5000/newsYearList`)
+    fetch(`/api/newsYearList`)
       .then(response => response.json())
       .then(response => this.setState({ years: response }))
       .catch(err => console.log(err));
@@ -47,12 +47,12 @@ class AdminPosts extends Component {
   getPostList = _ => {
     let path = this.props.match.params.year;
     if (isNaN(path)) {
-      fetch(`http://localhost:5000/posts`)
+      fetch(`/api/posts`)
         .then(response => response.json())
         .then(response => this.setState({ posts: response }))
         .catch(err => console.log(err));
     } else {
-      fetch(`http://localhost:5000/posts?year=` + path)
+      fetch(`/api/posts?year=` + path)
         .then(response => response.json())
         .then(response => this.setState({ posts: response }))
         .catch(err => console.log(err));
@@ -68,7 +68,7 @@ class AdminPosts extends Component {
       id: id
     };
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      fetch(`http://localhost:5000/posts/delete`, {
+      fetch(`/api/posts/delete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
@@ -87,7 +87,7 @@ class AdminPosts extends Component {
     data.append("img", this.state.base64Image);
     data.append("text", this.refs.createVenueText.value);
 
-    fetch(`http://localhost:5000/posts/add`, {
+    fetch(`/api/posts/add`, {
       method: "POST",
       body: data
     })

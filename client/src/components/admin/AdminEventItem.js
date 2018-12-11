@@ -108,7 +108,7 @@ class AdminEventItem extends Component {
     data.append("livestream", this.props.event.livestream);
     data.append("text", this.refs.editEventDescription.value);
     data.append("v_id", this.refs.editEventAddress.value);
-    fetch(`http://localhost:5000/event/update`, {
+    fetch(`/api/event/update`, {
       method: "POST",
       body: data
     })

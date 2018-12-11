@@ -90,7 +90,7 @@ class AdminContactPerson extends Component {
     data.append("phone", this.refs.editContactPersonPhone.value);
     data.append("email", this.refs.editContactPersonEmail.value);
     data.append("img", this.state.base64Image);
-    fetch(`http://localhost:5000/contactPersons/update`, {
+    fetch(`/api/contactPersons/update`, {
       method: "POST",
       body: data
     })
