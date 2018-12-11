@@ -9,44 +9,42 @@ const ContactPersons = ({ contactpersons }) => {
       and outputs the properties we want as a template */
   const contactList = contactpersons.map(contact => {
     return (
-      <div
-        className="contact-person col-sm-12 col-lg-6 d-inline-block"
-        key={contact.id}
-      >
-        <div className="card contact-person-card">
-          <img
-            className="contact-card-img"
-            src={require(`../../uploadedImg/contactPersonImg/${contact.id}`)}
-            alt="img"
-          />
-          <div className="card-body">
-            <h5 className="card-title">{contact.name}</h5>
-            <p className="card-text">{contact.role}</p>
+      <div key={contact.id} className="card w-100 mb-2">
+        <div className="card-body row">
+          <div className="col-md-3 col-sm-4">
+            <img
+              className="contact-card-img"
+              src={require(`../../uploadedImg/contactPersonImg/${contact.id}`)}
+              alt="img"
+            />
           </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <span className=" px-2 py-2 rounded text-dark mb-2 d-inline-block">
-                <i className="fa fa-envelope" />
-              </span>
-              <p> {contact.email} </p>
-            </li>
-            <li className="list-group-item">
-              <span className=" px-2 py-2 rounded text-dark mb-2 d-inline-block">
-                <i className="fa fa-phone" />
-              </span>
-              <p>{contact.phone}</p>
-            </li>
-          </ul>
+
+          <div className="col-md-9 col-sm-8">
+            <h5 className="card-title pb-3">{contact.name}</h5>
+
+            <div className="row">
+              <div className="col-md-6 col-sm-12">
+                <p>{contact.role}</p>
+              </div>
+              <div className="col-md-6 col-sm-12">
+                <p>
+                  <a href="insert email link here">{contact.email}</a>
+                </p>
+              </div>
+            </div>
+            <div className="row">
+              <div className="col-md-6 col-sm-12">
+                <p>Tlf.: {contact.phone}</p>
+              </div>
+              <div className="col-md-6 col-sm-12" />
+            </div>
+          </div>
         </div>
       </div>
     );
   });
   // returning the templates sequentially
-  return (
-    <div className="contact-list col-sm-12 col-lg-7 d-inline-block">
-      {contactList}
-    </div>
-  );
+  return <div className="contact-list mb-5">{contactList}</div>;
 };
 
 export default ContactPersons;

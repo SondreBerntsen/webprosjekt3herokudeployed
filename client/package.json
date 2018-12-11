@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "calidation": "^1.6.2",
-    "calidators": "^1.1.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-image-crop": "^6.0.9",
@@ -12,9 +10,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.0.5",
     "react-share": "^2.4.0",
-    "react-youtube": "^7.8.0",
-    "sweetalert": "^2.1.2",
-    "sweetalert-react": "^0.4.11"
+    "react-youtube": "^7.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
