@@ -34,7 +34,7 @@ event.post("/add", (req, res) => {
       let imgFile = req.body.img;
       let buf = Buffer.from(imgFile.substring(23), "base64");
       fs.writeFile(
-        `${__dirname}/../../client/src/uploadedImg/eventImg/${
+        `${__dirname}/client/src/uploadedImg/eventImg/${
           results.insertId
         }`,
         buf,
@@ -59,7 +59,7 @@ event.post("/delete", (req, res) => {
       return res.send(err);
     } else {
       //delete the image from the folder
-      fs.unlink("../../client/src/uploadedImg/eventImg/" + req.body.id, err => {
+      fs.unlink("/client/src/uploadedImg/eventImg/" + req.body.id, err => {
         if (err) {
           console.log("image was not deleted");
         }
@@ -106,7 +106,7 @@ event.post("/update", (req, res) => {
         let imgFile = req.body.img;
         let buf = Buffer.from(imgFile.substring(23), "base64");
         fs.writeFile(
-          `${__dirname}/../../client/src/uploadedImg/eventImg/${id}`,
+          `${__dirname}/client/src/uploadedImg/eventImg/${id}`,
           buf,
           function(err) {
             if (err) {

@@ -42,7 +42,7 @@ posts.post("/add", (req, res) => {
       let imgFile = req.body.img;
       let buf = Buffer.from(imgFile.substring(23), "base64");
       fs.writeFile(
-        `${__dirname}/../../client/src/uploadedImg/postImg/${results.insertId}`,
+        `${__dirname}/client/src/uploadedImg/postImg/${results.insertId}`,
         buf,
         function(err) {
           if (err) {
@@ -73,7 +73,7 @@ posts.post("/update", (req, res) => {
         let imgFile = req.body.img;
         let buf = Buffer.from(imgFile.substring(23), "base64");
         fs.writeFile(
-          `${__dirname}/../../client/src/uploadedImg/postImg/${id}`,
+          `${__dirname}/client/src/uploadedImg/postImg/${id}`,
           buf,
           function(err) {
             if (err) {
@@ -99,7 +99,7 @@ posts.post("/delete", (req, res) => {
       return res.send(err);
     } else {
       //delete the image from the folder
-      fs.unlink("../../client/src/uploadedImg/postImg/" + req.body.id, err => {
+      fs.unlink("/client/src/uploadedImg/postImg/" + req.body.id, err => {
         if (err) {
           console.log("image was not deleted");
         } else {

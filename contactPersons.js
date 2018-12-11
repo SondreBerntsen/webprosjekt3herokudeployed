@@ -44,7 +44,7 @@ contactPersons.post("/update", (req, res) => {
         let buf = Buffer.from(imgFile.substring(23), "base64"); // Ta-da imgFile.mv(
 
         fs.writeFile(
-          `${__dirname}/../../client/src/uploadedImg/contactPersonImg/${id}`,
+          `${__dirname}/client/src/uploadedImg/contactPersonImg/${id}`,
           buf,
           function(err) {
             if (err) {
