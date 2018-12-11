@@ -14,7 +14,7 @@ class AdminReviewItem extends Component {
     this.setState({ status: 'editing' })
     switch (e.target.name) {
       case 'year':
-        this.setState({ year: e.target.value})
+        this.setState({ year: e.target.value })
         //this.refs.venueIcon.innerHTML = "&#9998;"
         break;
       case 'text':
@@ -30,7 +30,6 @@ class AdminReviewItem extends Component {
       year: this.state.year,
       text: this.state.text
     }
-    console.log(body)
     fetch(`/api/review/update`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -38,7 +37,6 @@ class AdminReviewItem extends Component {
     })
       .then((response) => {
         response.json()
-        console.log(response)
       })
       .catch(err => console.log(err))
 
@@ -50,8 +48,6 @@ class AdminReviewItem extends Component {
       name: this.refs.newRecordingTitle.value,
       r_id: this.state.id
     }
-    console.log(body)
-    
     fetch(`/api/review/newRecording`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -62,7 +58,7 @@ class AdminReviewItem extends Component {
       })
       .then(_ => this.updateRecordingsList())
       .catch(err => console.log(err))
-  
+
   }
   handleSubmitImage = _ => {
     let body = new FormData();
@@ -77,13 +73,12 @@ class AdminReviewItem extends Component {
     })
       .then((response) => {
         response.json()
-        console.log(response)
       })
       .catch(err => console.log(err))
   }
   handleDeleteRecording = (e) => {
     let body = { id: e.target.value }
-    if (window.confirm('Are you sure you wish to delete this item?')) {
+    if (window.confirm('Er du sikker på at du vil slette opptaket?')) {
       fetch('/api/review/deleteRecording', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -95,7 +90,7 @@ class AdminReviewItem extends Component {
   }
   handleDeleteImage = (e) => {
     let body = { id: e.target.value }
-    if (window.confirm('Are you sure you wish to delete this item?')) {
+    if (window.confirm('Er du sikker på at du vil slette bildet?')) {
       fetch('/api/review/deleteImage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -109,14 +104,12 @@ class AdminReviewItem extends Component {
     }
   }
   updateRecordingsList = () => {
-    console.log('update called')
     fetch('/api/review/recordings?id=' + this.state.id)
-    .then(response => response.json())
-    .then(response => {
-      this.setState({recordings: response})  
-    })
-    .then(_ => console.log(this.state))
-    .catch(err => console.log(err))
+      .then(response => response.json())
+      .then(response => {
+        this.setState({ recordings: response })
+      })
+      .catch(err => console.log(err))
   }
 
   updateImagesList = () => {
@@ -141,14 +134,14 @@ class AdminReviewItem extends Component {
               </button>
             </div>
             <div className="col-md-1 col-sm-1">
-              <button 
-                className="btn btn-secondary btnInElementAdmin btn-sm" 
+              <button
+                className="btn btn-danger btnInElementAdmin btn-sm"
                 type="button"
                 value={this.props.year.id}
                 onClick={() => {
                   this.props.handleDelete(this.props.year.id, this.props.year.slides);
                 }}>
-                  Slett
+                Slett
                 </button>
             </div>
           </div>
@@ -195,9 +188,9 @@ class AdminReviewItem extends Component {
                   return (
                     <div key={index} className="colorandmarginchangeFIX subElement">
                       <div className="row">
-                        <p className="col-md-9">{link.name}</p>
+                        <p className="col-md-10">{link.name}</p>
                         <button
-                          className="btn btn-secondary btnInElementAdmin btn-sm col-md-2"
+                          className="btn btn-danger btn-sm col-1 pull-right "
                           value={link.id}
                           onClick={this.handleDeleteRecording}
                           type="button">Slett</button>
@@ -219,6 +212,7 @@ class AdminReviewItem extends Component {
                       name="newRecordingTitle"
                       ref="newRecordingTitle"
                       className="form-control col-md-12"
+                      required
                     ></input>
                   </div>
                 </div>
@@ -230,6 +224,7 @@ class AdminReviewItem extends Component {
                       name="newRecordingLink"
                       ref="newRecordingLink"
                       className="form-control col-md-12"
+                      required
                     ></input>
                   </div>
                 </div>
@@ -256,7 +251,7 @@ class AdminReviewItem extends Component {
                         <div className="col-md-6">
                           <h5>Tittel: </h5><p>{slide.title}</p>
                           <h5>Bildetekst: </h5><p>{slide.caption}</p>
-                          <button value={slide.id} onClick={this.handleDeleteImage} className="btn btn-secondary btnInElementAdmin btn-sm">
+                          <button value={slide.id} onClick={this.handleDeleteImage} className="btn btn-danger btnInElementAdmin btn-sm">
                             Slett
                           </button>
                         </div>
@@ -271,7 +266,7 @@ class AdminReviewItem extends Component {
             </div>
             <div className="col-md-4">
               <h5>Last opp nytt bilde</h5>
-              <form>
+              <form onSubmit={this.handleSubmitImage}>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Tittel</label>
@@ -279,6 +274,7 @@ class AdminReviewItem extends Component {
                       type="text"
                       ref="newImgTitle"
                       className="form-control col-md-12"
+                      required
                     ></input>
                   </div>
                 </div>
@@ -289,6 +285,7 @@ class AdminReviewItem extends Component {
                       type="text"
                       ref="newImgCaption"
                       className="form-control col-md-12"
+                      required
                     ></input>
                   </div>
                 </div>
@@ -298,11 +295,12 @@ class AdminReviewItem extends Component {
                       type="file"
                       ref="newImgFile"
                       className="marginBottom10"
+                      required
                     />
                   </div>
                 </div>
-                <button type="button" onClick={this.handleSubmitImage} className="btn btn-info btn-sm">
-                    Legg til
+                <button type="submit" className="btn btn-info btn-sm">
+                  Legg til
                   </button>
               </form>
             </div>

@@ -46,12 +46,11 @@ contactPersons.post("/update", (req, res) => {
         fs.writeFile(
           `${__dirname}/client/src/uploadedImg/contactPersonImg/${id}`,
           buf,
-          function(err) {
+          function (err) {
             if (err) {
               return console.log(err);
             }
 
-            console.log("The file was saved!");
           }
         );
       }

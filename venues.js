@@ -18,7 +18,7 @@ venues.get("/", (req, res) => {
 });
 
 venues.post("/add", (req, res) => {
-  const {address, capacity} = req.body
+  const { address, capacity } = req.body
 
   const INSERT_QUERY = `
     INSERT INTO venues (address, capacity) 
@@ -33,7 +33,7 @@ venues.post("/add", (req, res) => {
 });
 
 venues.post("/update", (req, res) => {
-  const {id, address, capacity} = req.body
+  const { id, address, capacity } = req.body
 
   const UPDATE_QUERY = `
     UPDATE venues 
@@ -43,15 +43,15 @@ venues.post("/update", (req, res) => {
   db.query(UPDATE_QUERY, (err, results) => {
     if (err) {
       return res.send(err);
-    }else{
+    } else {
       return res.json()
     }
   });
- 
+
 });
 
-venues.get("/delete", (req, res) => {
-  const {id} = req.body
+venues.post("/delete", (req, res) => {
+  const { id } = req.body;
 
   const DELETE_QUERY = `DELETE FROM venues WHERE venues.id = ${id}`
   db.query(DELETE_QUERY, (err, results) => {

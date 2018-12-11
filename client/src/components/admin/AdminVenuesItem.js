@@ -9,7 +9,6 @@ class AdminVenuesItem extends Component {
 
   componentDidMount() {
     this.setState({ ...this.state } = this.props.venue)
-    console.log(this.props.venue.id)
   }
   handleSubmit = (e) => {
     e.preventDefault()
@@ -39,18 +38,7 @@ class AdminVenuesItem extends Component {
       default:
     }
   }
-  handleDelete = _ => {
-    if(window.confirm('Are you sure you wish to delete this item?')){
-      fetch(`/api/venues/delete`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: this.state.id})
-      })
-      .then(_ => {
-      })
-      .catch( err => console.log(err))
-    }
-  }
+
   checkCapacity = () => {
     if (this.props.venue.capacity === null) {
       return <p className="col-lg-4">Ubegrenset/Offentlig eiendom </p>;
@@ -75,7 +63,9 @@ class AdminVenuesItem extends Component {
           {this.checkCapacity()}
           <div className="col-lg-3">
             <button
-              onClick={this.handleDelete}
+              onClick={e => {
+                this.props.handleDelete(e, this.state.id);
+              }}
               className="btn btn-sm btn-danger btnInElementAdmin">
               Slett
             </button>

@@ -21,7 +21,6 @@ class AdminPostItem extends Component {
         this.setState({ src: reader.result })
       );
       reader.readAsDataURL(e.target.files[0]);
-      // console.log(e.target.files[0]);
     }
   };
 
@@ -35,7 +34,6 @@ class AdminPostItem extends Component {
       this.setState({
         crop: { ...crop, height: null }
       });
-      //console.log(this.state.crop);
     } else {
       this.makeClientCrop(crop, pixelCrop);
     }
@@ -91,7 +89,7 @@ class AdminPostItem extends Component {
       method: "POST",
       body: data
     })
-      .then(function(response) {
+      .then(function (response) {
         if (response.status >= 400) {
           throw alert("Databasen ble ikke oppdatert");
         }

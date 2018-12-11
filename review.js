@@ -92,7 +92,6 @@ review.post("/deleteReview", (req, res) => {
           if (err) {
             console.log("image was not deleted");
           } else {
-            console.log("image was deleted");
           }
         });
       });
@@ -141,15 +140,13 @@ review.post("/newImage", (req, res) => {
       let buf = Buffer.from(imgFile.substring(23), "base64");
       fs.writeFile(
         `${__dirname}/../react-app/src/uploadedImg/sliderImg/${
-          results.insertId
+        results.insertId
         }`,
         buf,
-        function(err) {
+        function (err) {
           if (err) {
             return console.log(err);
           }
-
-          console.log("The file was saved!");
         }
       );
     }
@@ -185,7 +182,6 @@ review.post("/deleteImage", (req, res) => {
           if (err) {
             console.log("image was not deleted");
           } else {
-            console.log("image was deleted");
           }
         }
       );

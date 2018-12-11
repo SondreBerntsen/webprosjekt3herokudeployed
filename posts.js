@@ -44,12 +44,11 @@ posts.post("/add", (req, res) => {
       fs.writeFile(
         `${__dirname}/client/src/uploadedImg/postImg/${results.insertId}`,
         buf,
-        function(err) {
+        function (err) {
           if (err) {
             return console.log(err);
           }
 
-          console.log("The file was saved!");
         }
       );
     }
@@ -58,7 +57,6 @@ posts.post("/add", (req, res) => {
 //Updates the post
 posts.post("/update", (req, res) => {
   const { id, title, text } = req.body;
-  console.log(req.body.img);
 
   const UPDATE_QUERY = `
       UPDATE posts
@@ -75,16 +73,13 @@ posts.post("/update", (req, res) => {
         fs.writeFile(
           `${__dirname}/client/src/uploadedImg/postImg/${id}`,
           buf,
-          function(err) {
+          function (err) {
             if (err) {
               return console.log(err);
             }
-
-            console.log("The file was saved!");
           }
         );
       } else {
-        console.log("there is no image");
       }
     }
   });
@@ -103,7 +98,6 @@ posts.post("/delete", (req, res) => {
         if (err) {
           console.log("image was not deleted");
         } else {
-          console.log("image was deleted");
         }
       });
       return res.json(results);

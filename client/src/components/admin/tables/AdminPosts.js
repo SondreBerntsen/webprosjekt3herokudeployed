@@ -67,7 +67,7 @@ class AdminPosts extends Component {
     let body = {
       id: id
     };
-    if (window.confirm("Are you sure you wish to delete this item?")) {
+    if (window.confirm("Er du sikker på at du vil slette nyheten?")) {
       fetch(`/api/posts/delete`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -91,7 +91,7 @@ class AdminPosts extends Component {
       method: "POST",
       body: data
     })
-      .then(function(response) {
+      .then(function (response) {
         if (response.status >= 400) {
           throw alert("oh no");
         }
@@ -108,7 +108,6 @@ class AdminPosts extends Component {
         this.setState({ src: reader.result })
       );
       reader.readAsDataURL(e.target.files[0]);
-      // console.log(e.target.files[0]);
     }
   };
 
@@ -122,7 +121,6 @@ class AdminPosts extends Component {
       this.setState({
         crop: { ...crop, height: null }
       });
-      //console.log(this.state.crop);
     } else {
       this.makeClientCrop(crop, pixelCrop);
     }
@@ -185,7 +183,7 @@ class AdminPosts extends Component {
           </div>
           <div className="col-md-8">
             <div className="float-right">
-              {this.state.years.map(function(year) {
+              {this.state.years.map(function (year) {
                 return (
                   <Link
                     className="btn ml-1 mr-1"
@@ -219,7 +217,7 @@ class AdminPosts extends Component {
             <div className="form-row">
               <label>Bilde</label>
               <div>
-                <input type="file" onChange={this.onSelectFile} />
+                <input type="file" required onChange={this.onSelectFile} />
               </div>
               {src && (
                 <ReactCrop

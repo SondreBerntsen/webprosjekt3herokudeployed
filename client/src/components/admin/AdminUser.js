@@ -35,7 +35,6 @@ class AdminUser extends Component {
       id: this.props.user.id,
       password: this.refs.updateUserPassword.value,
     }
-    console.log(body);
     fetch(`/api/adminUsers/updatepwd`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

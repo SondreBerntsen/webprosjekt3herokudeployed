@@ -7,9 +7,7 @@ import "../../styles/anniversary.css"
 class Anniversary extends Component {
   state = {}
 
-  componentDidMount() {
-    console.log("We should loot some more info here I guess")
-  }
+
 
   render() {
     return (

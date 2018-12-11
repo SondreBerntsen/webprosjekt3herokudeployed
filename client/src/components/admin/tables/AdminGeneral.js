@@ -157,30 +157,34 @@ class AdminGeneral extends Component {
           id: id
         };
         // sends 'body'-object to general/frontpageUpdate to update the database
-        fetch(`/api/festivalreports/delete`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        })
-          .then(_ => {
-            this.getReports();
+        if (window.confirm('Er du sikker på at du vil slette rapporten?')) {
+          fetch(`/api/festivalreports/delete`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
           })
-          .catch(err => console.log(err));
+            .then(_ => {
+              this.getReports();
+            })
+            .catch(err => console.log(err));
+        }
         break;
       case "deletePartner":
         body = {
           id: id
         };
         // sends 'body'-object to general/frontpageUpdate to update the database
-        fetch(`/api/partners/delete`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        })
-          .then(_ => {
-            this.getPartners();
+        if (window.confirm('Er du sikker på at du vil slette samarbeidspartneren?')) {
+          fetch(`/api/partners/delete`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
           })
-          .catch(err => console.log(err));
+            .then(_ => {
+              this.getPartners();
+            })
+            .catch(err => console.log(err));
+        }
         break;
       default:
     }
@@ -482,10 +486,9 @@ class AdminGeneral extends Component {
                     <div key={partner.id}>
                       {partner.type === "private" ? (
                         <AdminPartner
-                          partner={partner}
-                          handleSubmit={this.handleSubmit}
-                          handleChange={this.handleChange}
-                          handleDelete={this.handleDelete}
+                        partner={partner}
+                        getPartners={this.getPartners}
+                        handleDelete={this.handleDelete}
                         />
                       ) : null}
                     </div>

@@ -37,37 +37,34 @@ class AdminReview extends Component {
       year: this.refs.newYear.value,
       text: this.refs.newText.value
     }
-    console.log(body)
 
     fetch('/api/review/newReview', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     })
-    .then((response) => {
-      response.json()
-      this.refs.newYear.value = ''
-      this.refs.newText.value = ''
-      this.refs.newReviewForm.click()
-      this.getData()
-    })
-    .catch(err => console.log(err))
-  }
-
-  handleDelete = (id, slides) => {
-    let body = {id: id, slides: slides}
-    console.log(body)
-    if (window.confirm('Are you sure you wish to delete this item?')){
-      fetch('/api/review/deleteReview', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(body)
-      })
-      .then(response => {
-        console.log(response)
+      .then((response) => {
+        response.json()
+        this.refs.newYear.value = ''
+        this.refs.newText.value = ''
+        this.refs.newReviewForm.click()
         this.getData()
       })
       .catch(err => console.log(err))
+  }
+
+  handleDelete = (id, slides) => {
+    let body = { id: id, slides: slides }
+    if (window.confirm('Er du sikker på at du vil slette tilbakeblikket?')) {
+      fetch('/api/review/deleteReview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(response => {
+          this.getData()
+        })
+        .catch(err => console.log(err))
     }
   }
 
@@ -88,7 +85,7 @@ class AdminReview extends Component {
             Legg til nytt år i tilbakeblikk
           </button>
           <div className="collapseForm col-12 collapse" id="newReviewForm">
-            <form className="col-md-8 col-lg-6">
+            <form className="col-md-8 col-lg-6" onSubmit={this.handleSubmit}>
               <div className="form-row">
                 <div className="form-group col-md-2">
                   <label>År</label>
@@ -96,17 +93,20 @@ class AdminReview extends Component {
                     type="number"
                     ref="newYear"
                     className="form-control"
+                    required
                   ></input>
                 </div>
               </div>
               <div className="form-group">
                 <label>Tekst</label>
-                <textarea 
-                  type="text" 
+                <textarea
+                  type="text"
                   ref="newText"
-                  className="form-control" />
+                  className="form-control"
+                  required />
+
               </div>
-              <button type="button" onClick={this.handleSubmit} className="btn btn-info btn-sm">
+              <button type="submit" className="btn btn-info btn-sm">
                 Send
               </button>
               <p>*Du kan redigere og legge til bilder og opptak etter du har opprettet elementet</p>

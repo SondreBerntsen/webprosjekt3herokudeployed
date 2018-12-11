@@ -18,22 +18,7 @@ class AdminScheduleItem extends Component {
   componentDidMount() {
     this.setState({ ...this.state } = this.props.event)
   }
-  handleDelete = _ => {
-    let body = {
-      id: this.state.id
-    }
-    if (window.confirm('Are you sure you wish to delete this item?')) {
-      fetch('/api/event/delete', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-        .then(_ => {
-          this.getEventList();
-        })
-        .catch(err => console.log(err))
-    }
-  }
+
   handleChange = (e) => {
     this.setState({ status: 'editing' })
     switch (e.target.name) {
@@ -52,7 +37,6 @@ class AdminScheduleItem extends Component {
         break;
       case 'date':
         this.setState({ date: e.target.value })
-        console.log(this.state.date)
         this.refs.dateIcon.innerHTML = "&#9998;"
         break;
       default:
@@ -69,7 +53,6 @@ class AdminScheduleItem extends Component {
       price: this.state.price,
       date: this.state.date
     }
-    console.log(body)
 
     fetch(`/api/programme/update`, {
       method: 'POST',
@@ -88,7 +71,6 @@ class AdminScheduleItem extends Component {
         this.refs.timeIcon.innerHTML = ""
         this.refs.priceIcon.innerHTML = ""
         this.refs.dateIcon.innerHTML = ""
-        console.log(this.state)
       })
       .catch(err => console.log(err))
   }

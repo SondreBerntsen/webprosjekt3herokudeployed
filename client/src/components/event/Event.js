@@ -5,8 +5,8 @@ import Navbar from "../Navbar";
 import Footer from "../Footer";
 import ScheduleItem from "../ScheduleItem";
 import EventVideo from "./EventVideo";
-import {fixLineBreaks} from "../Functions"
-import {FacebookShareButton, FacebookIcon} from 'react-share'
+import { fixLineBreaks } from "../Functions"
+import { FacebookShareButton, FacebookIcon } from 'react-share'
 import "../../styles/event.css";
 
 class Event extends Component {
@@ -28,7 +28,6 @@ class Event extends Component {
     yt_vid: []
   };
   componentDidMount() {
-    console.log(window.location.href)
     let id = this.props.match.params.eventId;
     this.getEventData(id);
     window.scrollTo(0, 0);
@@ -40,7 +39,6 @@ class Event extends Component {
       .then(response => {
         response[0].text = fixLineBreaks(response[0].text)
         this.setState({ eventData: response })
-        console.log(response[0])
       })
       .then(response => this.getYTID(response))
       .catch(err => console.log(err));
@@ -104,7 +102,7 @@ class Event extends Component {
           <div className="centerShareButton">
             <FacebookShareButton
               url={window.location.href}
-              >
+            >
               <FacebookIcon
                 url={window.location.href}
                 size={60}
@@ -114,18 +112,18 @@ class Event extends Component {
         </div>
       </div>
     ) : (
-      <div className="errorDiv container">
-        <div className="vh-85">
-          <h1 className="sadSmilyError">&#x2639;</h1>
-          <h1 className="txt404">404</h1>
-          <h3>Page not found</h3>
-          <p>
-            The page you are looking for doesn't exist or an other error
-            occured.
+        <div className="errorDiv container">
+          <div className="vh-85">
+            <h1 className="sadSmilyError">&#x2639;</h1>
+            <h1 className="txt404">404</h1>
+            <h3>Page not found</h3>
+            <p>
+              The page you are looking for doesn't exist or an other error
+              occured.
           </p>
+          </div>
         </div>
-      </div>
-    );
+      );
     return (
       <div>
         <Navbar />

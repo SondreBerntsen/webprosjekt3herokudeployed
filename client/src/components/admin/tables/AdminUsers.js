@@ -22,7 +22,7 @@ class AdminUsers extends Component {
     let body = {
       id: id
     }
-    if (window.confirm('Are you sure you wish to delete this user?')) {
+    if (window.confirm('Er du sikker på at du vil slette brukeren?')) {
       fetch(`/api/adminUsers/delete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -21,7 +21,6 @@ class AdminVenues extends Component {
       address: this.refs.createVenueAddress.value,
       capacity: this.refs.createVenueCapacity.value
     }
-    console.log(body)
     fetch(`/api/venues/add`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -32,6 +31,25 @@ class AdminVenues extends Component {
       })
       .catch(err => console.log(err))
   }
+
+  handleDelete = (e, id) => {
+    e.preventDefault();
+    let body = {
+      id: id
+    };
+    if (window.confirm('Er du sikker på at du vil slette denne adressen?')) {
+      fetch(`/api/venues/delete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+        .then(_ => {
+          this.getVenueList()
+        })
+        .catch(err => console.log(err))
+    }
+  }
+
   render() {
     return (
       <div className="container tablesAdmin col-md-9 col-lg-10">
@@ -46,7 +64,7 @@ class AdminVenues extends Component {
           Legg til ny adresse
         </button>
         <div className=" collapseForm col-md-12 collapse" id="newVenueForm">
-          <form className="col-md-6 col-lg-4">
+          <form className="col-md-6 col-lg-4" onSubmit={this.handleSubmit} >
             <div className="form-group">
               <label>Adresse</label>
               <input
@@ -54,6 +72,7 @@ class AdminVenues extends Component {
                 type="text"
                 className="form-control"
                 placeholder="Legg til adresse"
+                required
               />
             </div>
             <div className="form-group">
@@ -62,9 +81,10 @@ class AdminVenues extends Component {
                 ref="createVenueCapacity"
                 type="number"
                 className="form-control"
+                required
               />
             </div>
-            <button onClick={this.handleSubmit} type="submit" className="btn btn-info btn-sm">
+            <button type="submit" className="btn btn-info btn-sm">
               Legg til
             </button>
           </form>
@@ -72,7 +92,7 @@ class AdminVenues extends Component {
         {/*Mapping out all of the venues in the array*/}
         {this.state.venues.map(venue => (
           <div key={venue.id}>
-            <AdminVenuesItem venue={venue} />
+            <AdminVenuesItem handleDelete={this.handleDelete} venue={venue} />
           </div>
         ))}
       </div>

@@ -8,7 +8,6 @@ var jwt = require('jsonwebtoken');
 
 //Function that tries to log in the user
 adminLogin.post("/", (req, res) => {
-    console.log('du prøver å logge inn');
     const { email, password } = req.body
     const SELECT_USER_QUERY = `SELECT * FROM users WHERE email='${email}'`;//select all user info
     db.query(SELECT_USER_QUERY, (err, results) => {
@@ -24,7 +23,6 @@ adminLogin.post("/", (req, res) => {
                     console.log(result);
                     return res.status(400).send("passwords do not match");//If passwords do not match
                 } else {
-                    console.log('logg inn fungerer');
                     const JWTToken = jwt.sign({
                         email: results[0].email,
                         id: results[0].id
@@ -33,7 +31,6 @@ adminLogin.post("/", (req, res) => {
                         {
                             expiresIn: '2h'
                         });
-                    console.log(JWTToken);
                     res.send({ token: JWTToken });
                 }
             });

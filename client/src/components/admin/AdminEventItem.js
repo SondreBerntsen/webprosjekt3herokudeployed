@@ -36,7 +36,6 @@ class AdminEventItem extends Component {
         this.setState({ src: reader.result })
       );
       reader.readAsDataURL(e.target.files[0]);
-      // console.log(e.target.files[0]);
     }
   };
 
@@ -50,7 +49,6 @@ class AdminEventItem extends Component {
       this.setState({
         crop: { ...crop, height: null }
       });
-      //console.log(this.state.crop);
     } else {
       this.makeClientCrop(crop, pixelCrop);
     }
@@ -266,7 +264,7 @@ class AdminEventItem extends Component {
                   <option ref="editEventAddress" value={this.props.event.v_id}>
                     {this.props.event.v_id}
                   </option>
-                  {this.props.venues.map(function(venue) {
+                  {this.props.venues.map(function (venue) {
                     return (
                       <option key={venue.id} value={venue.id}>
                         {venue.address}
@@ -318,35 +316,35 @@ class AdminEventItem extends Component {
                 </div>
               </div>
             ) : (
-              /*if event does not have a scheduled livestream */
-              <div className="form-row p-2 mb-3">
-                <div className="form-check form-check-inline mr-5">
-                  <input
-                    className="form-check-input"
-                    name="livestreamradio"
-                    type="radio"
-                    value="1"
-                    onChange={this.handleChange}
-                  />
-                  <label className="form-check-label">
-                    Planlagt Livestream
+                /*if event does not have a scheduled livestream */
+                <div className="form-row p-2 mb-3">
+                  <div className="form-check form-check-inline mr-5">
+                    <input
+                      className="form-check-input"
+                      name="livestreamradio"
+                      type="radio"
+                      value="1"
+                      onChange={this.handleChange}
+                    />
+                    <label className="form-check-label">
+                      Planlagt Livestream
                   </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    defaultChecked
-                    className="form-check-input"
-                    name="livestreamradio"
-                    type="radio"
-                    value="0"
-                    onChange={this.handleChange}
-                  />
-                  <label className="form-check-label">
-                    Ingen planlagt livestream
+                  </div>
+                  <div className="form-check form-check-inline">
+                    <input
+                      defaultChecked
+                      className="form-check-input"
+                      name="livestreamradio"
+                      type="radio"
+                      value="0"
+                      onChange={this.handleChange}
+                    />
+                    <label className="form-check-label">
+                      Ingen planlagt livestream
                   </label>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             <button type="submit" className="btn btn-info btn-sm">
               Rediger
             </button>

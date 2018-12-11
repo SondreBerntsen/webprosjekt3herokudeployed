@@ -23,9 +23,9 @@ event.post("/add", (req, res) => {
       INSERT INTO events (title, text, time, date, price, youtube_link, payment_link, v_id, livestream) 
       VALUES ('${req.body.title}', '${req.body.text}', '${req.body.time}', '${
     req.body.date
-  }', ${req.body.price}, '${req.body.youtube_link}', '${
+    }', ${req.body.price}, '${req.body.youtube_link}', '${
     req.body.payment_link
-  }', '${req.body.venue}', '${req.body.livestream}' )`;
+    }', '${req.body.venue}', '${req.body.livestream}' )`;
   db.query(INSERT_QUERY, (err, results) => {
     if (err) {
       console.log(err);
@@ -35,15 +35,14 @@ event.post("/add", (req, res) => {
       let buf = Buffer.from(imgFile.substring(23), "base64");
       fs.writeFile(
         `${__dirname}/client/src/uploadedImg/eventImg/${
-          results.insertId
+        results.insertId
         }`,
         buf,
-        function(err) {
+        function (err) {
           if (err) {
             return console.log(err);
           }
 
-          console.log("The file was saved!");
         }
       );
     }
@@ -108,12 +107,11 @@ event.post("/update", (req, res) => {
         fs.writeFile(
           `${__dirname}/client/src/uploadedImg/eventImg/${id}`,
           buf,
-          function(err) {
+          function (err) {
             if (err) {
               return console.log(err);
             }
 
-            console.log("The file was saved!");
           }
         );
       }

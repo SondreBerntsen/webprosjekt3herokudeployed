@@ -135,7 +135,7 @@ class AdminEvents extends Component {
       method: "POST",
       body: data
     })
-      .then(function(response) {
+      .then(function (response) {
         if (response.status >= 400) {
           throw alert("oh no");
         }
@@ -166,7 +166,6 @@ class AdminEvents extends Component {
         this.setState({ src: reader.result })
       );
       reader.readAsDataURL(e.target.files[0]);
-      // console.log(e.target.files[0]);
     }
   };
 
@@ -180,7 +179,6 @@ class AdminEvents extends Component {
       this.setState({
         crop: { ...crop, height: null }
       });
-      //console.log(this.state.crop);
     } else {
       this.makeClientCrop(crop, pixelCrop);
     }
@@ -244,7 +242,7 @@ class AdminEvents extends Component {
             </div>
             <div className="col-md-8 ">
               <div className="float-right">
-                {this.state.years.map(function(year) {
+                {this.state.years.map(function (year) {
                   return (
                     <Link
                       className="btn ml-1 mr-1"
@@ -302,6 +300,7 @@ class AdminEvents extends Component {
                     type="time"
                     className="form-control"
                     ref="createEventTime"
+                    required
                   />
                 </div>
               </div>
@@ -330,7 +329,7 @@ class AdminEvents extends Component {
                 <div className="form-group col-md-6">
                   <label>Bilde</label>
                   <div>
-                    <input type="file" onChange={this.onSelectFile} />
+                    <input type="file" required onChange={this.onSelectFile} />
                   </div>
                   {src && (
                     <ReactCrop
@@ -350,7 +349,7 @@ class AdminEvents extends Component {
                     required
                   >
                     <option />
-                    {this.state.venues.map(function(venue) {
+                    {this.state.venues.map(function (venue) {
                       return (
                         <option key={venue.id} value={venue.id}>
                           {venue.address}
@@ -368,6 +367,7 @@ class AdminEvents extends Component {
                   type="radio"
                   value="1"
                   onChange={this.handleChange}
+                  required
                 />
                 <label className="form-check-label">Planlagt Livestream</label>
               </div>
