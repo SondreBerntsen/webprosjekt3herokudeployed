@@ -1,6 +1,9 @@
 import React, { Component } from "react";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 class AdminEventItem extends Component {
+  // Cropping: https://codesandbox.io/s/72py4jlll6
   state = {
     id: "",
     title: "",
@@ -13,10 +16,81 @@ class AdminEventItem extends Component {
     img: "",
     address: "",
     text: "",
-    status: "unchanged"
+    src: null,
+    crop: {
+      aspect: 1.5,
+      width: 50,
+      height: 70,
+      x: 0,
+      y: 0
+    }
   };
   componentDidMount() {
     this.setState(({ ...this.state } = this.props.event));
+  }
+
+  onSelectFile = e => {
+    if (e.target.files && e.target.files.length > 0) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () =>
+        this.setState({ src: reader.result })
+      );
+      reader.readAsDataURL(e.target.files[0]);
+      // console.log(e.target.files[0]);
+    }
+  };
+
+  onImageLoaded = (image, pixelCrop) => {
+    this.imageRef = image;
+
+    // Make the library regenerate aspect crops if loading new images.
+    const { crop } = this.state;
+
+    if (crop.aspect && crop.height && crop.width) {
+      this.setState({
+        crop: { ...crop, height: null }
+      });
+      //console.log(this.state.crop);
+    } else {
+      this.makeClientCrop(crop, pixelCrop);
+    }
+  };
+
+  onCropComplete = (crop, pixelCrop) => {
+    this.makeClientCrop(crop, pixelCrop);
+  };
+
+  onCropChange = crop => {
+    this.setState({ crop });
+  };
+
+  async makeClientCrop(crop, pixelCrop) {
+    if (this.imageRef && crop.width && crop.height) {
+      await this.getCroppedImg(this.imageRef, pixelCrop, "newFile.jpeg");
+    }
+  }
+
+  getCroppedImg(image, pixelCrop, fileName) {
+    const canvas = document.createElement("canvas");
+    canvas.width = pixelCrop.width;
+    canvas.height = pixelCrop.height;
+    const ctx = canvas.getContext("2d");
+
+    ctx.drawImage(
+      image,
+      pixelCrop.x,
+      pixelCrop.y,
+      pixelCrop.width,
+      pixelCrop.height,
+      0,
+      0,
+      pixelCrop.width,
+      pixelCrop.height
+    );
+
+    // As Base64 string
+    const base64Image = canvas.toDataURL("image/jpeg");
+    this.setState({ base64Image });
   }
 
   handleSubmit = e => {
@@ -27,14 +101,14 @@ class AdminEventItem extends Component {
     data.append("youtube_link", this.refs.editEventYoutubeLink.value);
     data.append("title", this.refs.editEventTitle.value);
     data.append("date", this.refs.editEventDate.value);
-    data.append("img", this.refs.editEventImg.files[0]);
+    data.append("img", this.state.base64Image);
     data.append("price", this.refs.editEventPrice.value);
     data.append("time", this.refs.editEventTime.value);
     data.append("payment_link", this.refs.editEventPaymentLink.value);
     data.append("livestream", this.props.event.livestream);
     data.append("text", this.refs.editEventDescription.value);
     data.append("v_id", this.refs.editEventAddress.value);
-    fetch(`/api/event/update`, {
+    fetch(`http://localhost:5000/event/update`, {
       method: "POST",
       body: data
     })
@@ -70,6 +144,7 @@ class AdminEventItem extends Component {
   };
 
   render() {
+    const { crop, src } = this.state;
     return (
       <React.Fragment>
         <div className="elementCardAdmin row">
@@ -169,11 +244,18 @@ class AdminEventItem extends Component {
             <div className="form-row">
               <div className="form-group col-md-6">
                 <label>Bilde</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  ref="editEventImg"
-                />
+                <div>
+                  <input type="file" onChange={this.onSelectFile} />
+                </div>
+                {src && (
+                  <ReactCrop
+                    src={src}
+                    crop={crop}
+                    onImageLoaded={this.onImageLoaded}
+                    onComplete={this.onCropComplete}
+                    onChange={this.onCropChange}
+                  />
+                )}
                 <div className="imgMargin">
                   {this.getImage(this.props.event.id)}
                 </div>
