@@ -1,7 +1,6 @@
 //Newscard component that displays the data
 import React from "react";
 import { Link } from "react-router-dom";
-import { fixDateString } from './Functions'
 
 const NewsCard = props => {
   return (
@@ -14,7 +13,7 @@ const NewsCard = props => {
               src={require("../uploadedImg/postImg/" + props.id)}
               alt="newsimg"
             />
-            <p className="dateOnNewsImg">{fixDateString(props.date)}</p>
+            <p className="dateOnNewsImg">{props.date}</p>
           </div>
           <div className="textNewsDiv">
             <h5>{props.title}</h5>
