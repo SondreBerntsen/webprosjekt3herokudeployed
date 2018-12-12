@@ -8,4 +8,5 @@ The assignment is to create a dynamical website for Drammen Sacred, a festival t
 * Run npm install in root folder
 * Run npm install in /client
 * Run node server.js in root folder
-* Run npm start in client folder,
+* Run npm start in client folder
+* import the databse
