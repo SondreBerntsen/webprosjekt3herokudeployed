@@ -19,8 +19,6 @@ event.get("/", (req, res) => {
 });
 
 event.post("/add", (req, res) => {
-  let imgFile = req.files.img;
-  console.log(req.body);
   const INSERT_QUERY = `
       INSERT INTO events (title, text, time, date, price, youtube_link, payment_link, v_id, livestream) 
       VALUES ('${req.body.title}', '${req.body.text}', '${req.body.time}', '${
@@ -33,16 +31,17 @@ event.post("/add", (req, res) => {
       console.log(err);
       return res.status(400).send("Database not updated");
     } else {
-      imgFile.mv(
-        `${__dirname}/../../client/src/uploadedImg/eventImg/${
+      let imgFile = req.body.img;
+      let buf = Buffer.from(imgFile.substring(23), "base64");
+      fs.writeFile(
+        `${__dirname}/../react-app/src/uploadedImg/eventImg/${
           results.insertId
         }`,
+        buf,
         function(err) {
           if (err) {
-            return res.status(500).send(err);
+            return console.log(err);
           }
-
-          return res.json(results);
         }
       );
     }
@@ -81,11 +80,8 @@ event.post("/update", (req, res) => {
     livestream,
     v_id
   } = req.body;
-  //if event image is updated
-  if (req.files !== null) {
-    let imgFile = req.files.img;
 
-    let UPDATE_QUERY = `UPDATE events 
+  let UPDATE_QUERY = `UPDATE events 
     SET 
       title = '${title}',
       text='${text}',
@@ -99,48 +95,26 @@ event.post("/update", (req, res) => {
     WHERE
       id = '${id}'
   `;
-    db.query(UPDATE_QUERY, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).send("Database not updated");
-      } else {
-        imgFile.mv(
-          `${__dirname}/../../client/src/uploadedImg/eventImg/${id}`,
+  db.query(UPDATE_QUERY, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).send("Database not updated");
+    } else {
+      if (req.body.img !== "undefined") {
+        let imgFile = req.body.img;
+        let buf = Buffer.from(imgFile.substring(23), "base64");
+        fs.writeFile(
+          `${__dirname}/../react-app/src/uploadedImg/eventImg/${id}`,
+          buf,
           function(err) {
             if (err) {
-              return res.status(500).send(err);
+              return console.log(err);
             }
-            return res.json(results);
           }
         );
       }
-    });
-  }
-  //if event image is not updated
-  else {
-    let UPDATE_QUERY = `UPDATE events 
-    SET 
-      title = '${title}',
-      text='${text}',
-      time='${time}',
-      date='${date}',
-      price='${price}',
-      youtube_link='${youtube_link}',
-      payment_link='${payment_link}',
-      livestream='${livestream}',
-      v_id='${v_id}'
-    WHERE
-      id = '${id}'
-  `;
-    db.query(UPDATE_QUERY, (err, results) => {
-      if (err) {
-        console.log(err);
-        return res.status(400).send("Database not updated");
-      } else {
-        return res.json(results);
-      }
-    });
-  }
+    }
+  });
 });
 
 module.exports = event;
