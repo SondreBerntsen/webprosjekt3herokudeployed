@@ -13,10 +13,10 @@ posts.get("/", (req, res) => {
   let SELECT_ALL_POSTS_QUERY;
   //If year is specified, get the posts from that year
   if (year) {
-    SELECT_ALL_POSTS_QUERY = `SELECT id, title, text, date FROM posts WHERE year(date)='${year}' ORDER BY date DESC`;
+    SELECT_ALL_POSTS_QUERY = `SELECT id, title, text, DATE_FORMAT(posts.date, '%d/%m/%Y') as date FROM posts WHERE year(date)='${year}' ORDER BY date DESC`;
   } else {
     //If year is not specified get the posts from the most recent year
-    SELECT_ALL_POSTS_QUERY = `SELECT id, title, text, date FROM posts WHERE year(date)=(SELECT MAX(year(date)) FROM posts) ORDER BY date DESC`;
+    SELECT_ALL_POSTS_QUERY = `SELECT id, title, text, DATE_FORMAT(posts.date, '%d/%m/%Y') as date FROM posts WHERE year(date)=(SELECT MAX(year(date)) FROM posts) ORDER BY date DESC`;
   }
 
   db.query(SELECT_ALL_POSTS_QUERY, (err, results) => {

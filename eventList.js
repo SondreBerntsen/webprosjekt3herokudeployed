@@ -8,9 +8,20 @@ eventList.get("/", (req, res) => {
   const { year } = req.query;
   let SELECT_ALL_EVENTS_QUERY;
   if (year) {
-    SELECT_ALL_EVENTS_QUERY = `SELECT * FROM events WHERE year(date)='${year}' ORDER BY id DESC`;
+    SELECT_ALL_EVENTS_QUERY = `
+      SELECT id, title, text, time, DATE_FORMAT(date, '%Y-%m-%d') AS date, price, youtube_link, payment_link, livestream, u_id, v_id 
+      FROM events 
+      WHERE year(date)='${year}' 
+      ORDER BY id DESC
+    `;
   } else {
-    SELECT_ALL_EVENTS_QUERY = `SELECT * FROM events WHERE year(date)=(SELECT MAX(year(date)) FROM events) ORDER BY id DESC`;
+    SELECT_ALL_EVENTS_QUERY = `
+      SELECT id, title, text, time, DATE_FORMAT(date, '%Y-%m-%d') AS date, price, youtube_link, payment_link, livestream, u_id, v_id  
+      FROM events 
+      WHERE year(date)=(SELECT MAX(year(date)) 
+      FROM events) 
+      ORDER BY id DESC
+    `;
   }
 
   db.query(SELECT_ALL_EVENTS_QUERY, (err, results) => {

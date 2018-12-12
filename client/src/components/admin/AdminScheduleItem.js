@@ -20,6 +20,7 @@ class AdminScheduleItem extends Component {
   }
 
   handleChange = (e) => {
+    console.log(e.target.value)
     this.setState({ status: 'editing' })
     switch (e.target.name) {
       case 'venue':
@@ -163,7 +164,6 @@ class AdminScheduleItem extends Component {
               <div className="form-group col-md-6">
                 <label>Dato</label>
                 <input
-                  type="date"
                   name="date"
                   className="form-control isEdited"
                   defaultValue={this.props.event.date}

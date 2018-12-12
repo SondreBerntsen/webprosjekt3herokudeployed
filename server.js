@@ -5,7 +5,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, 'client/build')));
+app.use(express.static(path.join(__dirname, 'client')));
 
 var navbar = require("./navbar");
 var home = require("./home");
@@ -56,7 +56,7 @@ app.use("/api/settings", settings);
 app.use("/api/adminLogin", adminLogin);
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/client/build/index.html'));
+  res.sendFile(path.join(__dirname + '/client/index.html'));
 });
 
 const port = process.env.PORT || 3000;
